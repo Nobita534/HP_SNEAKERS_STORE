@@ -43,40 +43,6 @@ php artisan serve
 # 6. Truy cập: http://127.0.0.1:8000
 ```
 
-## 🎯 Tính năng
-
-### ✅ Đã hoàn thành
-- 🏠 Trang chủ responsive với hero banner
-- 📦 Hiển thị danh mục sản phẩm (Nam, Nữ, Trẻ em, Sale)
-- 👟 Grid sản phẩm mới nhất với phân trang
-- ⭐ Sản phẩm nổi bật
-- 🔐 Hệ thống đăng ký/đăng nhập
-- 👁️ Toggle hiển thị mật khẩu
-- 💬 Flash messages đẹp (4 loại)
-- 📱 Responsive design
-- 🎨 UI tone màu xanh đơn sắc
-
-### 🚧 Đang phát triển
-- 🛒 Giỏ hàng
-- 💳 Thanh toán
-- 📋 Quản lý đơn hàng
-- ❤️ Danh sách yêu thích
-
-## 📊 Dữ liệu mẫu
-
-Sau khi chạy `php artisan migrate:fresh --seed`:
-
-- **4 danh mục:** Nam, Nữ, Trẻ em, Sale
-- **14 sản phẩm** từ các thương hiệu:
-  - Nike (Air Max 270, Air Force 1, Air Max SC Kids)
-  - Adidas (Ultraboost 22, Stan Smith, Superstar Kids)
-  - Puma (RS-X, Cali Sport)
-  - New Balance (574, 327)
-  - Asics (Gel-Kayano 29)
-  - Reebok (Classic Leather)
-  - Vans (Old Skool)
-  - Converse (Chuck Taylor)
-
 ## 🎨 Stack công nghệ
 
 - **Backend:** Laravel 11
@@ -87,52 +53,6 @@ Sau khi chạy `php artisan migrate:fresh --seed`:
 - **Database:** MySQL 8
 - **Build Tool:** Vite
 
-## 📁 Cấu trúc quan trọng
-
-```
-HPSNEAKERS-NEW/
-├── app/Http/Controllers/
-│   ├── AuthController.php      # Đăng nhập/ký
-│   └── HomeController.php      # Trang chủ
-├── app/Models/
-│   ├── Category.php
-│   ├── Product.php
-│   └── User.php
-├── database/
-│   ├── migrations/
-│   │   ├── 2025_11_26_135834_create_categories_table.php
-│   │   └── 2025_11_26_135841_create_products_table.php
-│   └── seeders/
-│       ├── CategorySeeder.php
-│       └── ProductSeeder.php
-├── resources/views/
-│   ├── auth/
-│   │   ├── login.blade.php
-│   │   └── register.blade.php
-│   ├── layouts/
-│   │   ├── app.blade.php
-│   │   └── partials/
-│   │       ├── header.blade.php
-│   │       └── footer.blade.php
-│   └── home.blade.php
-└── routes/web.php
-```
-
-## 🔧 Lệnh hữu ích
-
-```bash
-# Routes
-php artisan route:list
-
-# Reset database
-php artisan migrate:fresh --seed
-
-# Clear cache
-php artisan optimize:clear
-
-# Build production
-npm run build
-```
 
 ### 🎉 Happy Coding!
 
