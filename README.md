@@ -1,7 +1,5 @@
 # 👟 HP Sneakers - Website Bán Giày Thể Thao
 
-Website thương mại điện tử bán giày thể thao chính hãng được xây dựng bằng Laravel 11 và Tailwind CSS 4.
-
 ## 📋 Yêu cầu hệ thống
 
 - PHP >= 8.2
@@ -135,42 +133,6 @@ php artisan optimize:clear
 # Build production
 npm run build
 ```
-
-## 🐛 Xử lý lỗi
-
-### "Class not found"
-```bash
-composer dump-autoload
-```
-
-### "No application encryption key"
-```bash
-php artisan key:generate
-```
-
-### "Access denied for user"
-- Kiểm tra `.env`: DB_USERNAME, DB_PASSWORD
-- Đảm bảo MySQL đang chạy
-
-### "Unknown database"
-- Tạo database `sneakershop` trong phpMyAdmin
-- Hoặc: `mysql -u root -e "CREATE DATABASE sneakershop"`
-
-### Không thấy CSS
-- Chạy: `npm run dev`
-- Hoặc: `npm run build`
-
-## 📞 Liên hệ
-
-- **Email:** support@hpsneakers.com
-- **Phone:** 1900 xxxx
-- **Website:** http://127.0.0.1:8000
-
-## 📄 License
-
-Developed by HP Sneakers Team - 2025
-
----
 
 ### 🎉 Happy Coding!
 
