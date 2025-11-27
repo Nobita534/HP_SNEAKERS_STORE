@@ -17,12 +17,48 @@
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-            <tr>
-                <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                    Chức năng đang được phát triển
-                </td>
-            </tr>
+            @forelse($users as $user)
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-sm text-gray-800">{{ $user->id }}</td>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-800">{{ $user->name }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">{{ $user->email }}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800' }}">
+                            {{ ucfirst($user->role) }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-600">{{ $user->created_at->format('d/m/Y') }}</td>
+                    <td class="px-6 py-4 text-sm">
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            @if($user->role !== 'admin')
+                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Xóa người dùng này?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        Chưa có người dùng nào
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>
+
+@if($users->hasPages())
+    <div class="mt-4">
+        {{ $users->links() }}
+    </div>
+@endif
 @endsection

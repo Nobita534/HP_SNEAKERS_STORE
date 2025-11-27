@@ -27,13 +27,47 @@
             </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-            <!-- Dữ liệu sẽ được load từ controller -->
-            <tr>
-                <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                    Chức năng đang được phát triển
-                </td>
-            </tr>
+            @forelse($products as $product)
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-sm text-gray-800">{{ $product->id }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-12 h-12 rounded object-cover mr-3">
+                            <span class="text-sm font-medium text-gray-800">{{ $product->name }}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-600">{{ $product->category->name }}</td>
+                    <td class="px-6 py-4 text-sm font-semibold text-gray-800">{{ number_format($product->price, 0, ',', '.') }}đ</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">{{ $product->stock }}</td>
+                    <td class="px-6 py-4 text-sm">
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.products.edit', $product) }}" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Xóa sản phẩm này?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                        Chưa có sản phẩm nào
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 </div>
+
+@if($products->hasPages())
+    <div class="mt-4">
+        {{ $products->links() }}
+    </div>
+@endif
 @endsection
