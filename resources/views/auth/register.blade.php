@@ -111,22 +111,6 @@
                     </div>
                 </div>
 
-                <!-- Terms -->
-                <div class="flex items-start">
-                    <input 
-                        id="terms" 
-                        name="terms" 
-                        type="checkbox"
-                        required
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
-                    <label for="terms" class="ml-2 block text-sm text-gray-700">
-                        Tôi đồng ý với 
-                        <a href="#" class="text-blue-600 hover:text-blue-700">Điều khoản dịch vụ</a> 
-                        và 
-                        <a href="#" class="text-blue-600 hover:text-blue-700">Chính sách bảo mật</a>
-                    </label>
-                </div>
-
                 <!-- Submit Button -->
                 <button 
                     type="submit"
@@ -134,28 +118,6 @@
                     Đăng ký
                 </button>
 
-                <!-- Social Register -->
-                <div class="mt-6">
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Hoặc đăng ký với</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 grid grid-cols-2 gap-3">
-                        <button type="button" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
-                            <i class="fab fa-facebook text-blue-600 mr-2"></i>
-                            Facebook
-                        </button>
-                        <button type="button" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
-                            <i class="fab fa-google text-red-600 mr-2"></i>
-                            Google
-                        </button>
-                    </div>
-                </div>
             </form>
 
             <!-- Login Link -->

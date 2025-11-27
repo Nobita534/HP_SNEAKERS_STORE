@@ -69,52 +69,12 @@
                     </div>
                 </div>
 
-                <!-- Remember Me & Forgot Password -->
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input 
-                            id="remember" 
-                            name="remember" 
-                            type="checkbox"
-                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">
-                            Ghi nhớ đăng nhập
-                        </label>
-                    </div>
-                    <a href="#" class="text-sm text-blue-600 hover:text-blue-700">
-                        Quên mật khẩu?
-                    </a>
-                </div>
-
                 <!-- Submit Button -->
                 <button 
                     type="submit"
                     class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
                     Đăng nhập
                 </button>
-
-                <!-- Social Login -->
-                <div class="mt-6">
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Hoặc đăng nhập với</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-6 grid grid-cols-2 gap-3">
-                        <button type="button" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
-                            <i class="fab fa-facebook text-blue-600 mr-2"></i>
-                            Facebook
-                        </button>
-                        <button type="button" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
-                            <i class="fab fa-google text-red-600 mr-2"></i>
-                            Google
-                        </button>
-                    </div>
-                </div>
             </form>
 
             <!-- Register Link -->
