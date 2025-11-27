@@ -27,7 +27,12 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             
-            return redirect()->intended('/')->with('success', 'Đăng nhập thành công!');
+            // Redirect admin về dashboard, user về home
+            $redirectTo = auth()->user()->role === 'admin' 
+                ? route('admin.dashboard') 
+                : route('home');
+            
+            return redirect()->intended($redirectTo)->with('success', 'Đăng nhập thành công!');
         }
 
         return back()->withErrors([
