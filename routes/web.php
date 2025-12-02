@@ -6,10 +6,14 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Route hiển thị sản phẩm theo thương hiệu
+Route::get('/thuong-hieu/{brand}', [ProductController::class, 'byBrand'])->name('products.by-brand');
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -24,14 +28,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 // Admin Routes
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    
+
     // Product Management
     Route::resource('products', AdminProductController::class);
-    
+
     // User Management
     Route::resource('users', AdminUserController::class);
-    
+
     // Order Management
     Route::resource('orders', AdminOrderController::class);
 });
-

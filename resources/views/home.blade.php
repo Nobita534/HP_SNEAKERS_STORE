@@ -27,31 +27,14 @@
     </div>
 </section>
 
-<!-- Category Cards -->
-<section class="container mx-auto px-4 py-12">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        @foreach($categories as $category)
-        <a href="#" class="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
-            <div class="aspect-square bg-blue-100 flex items-center justify-center">
-                <i class="fas {{ $category->icon }} text-6xl text-blue-600 group-hover:scale-110 transition"></i>
-            </div>
-            <div class="p-4 text-center">
-                <h3 class="font-bold text-lg uppercase">{{ $category->name }}</h3>
-                <p class="text-sm text-gray-600">{{ $category->products->count() }}+ sản phẩm</p>
-            </div>
-        </a>
-        @endforeach
-    </div>
-</section>
-
 <!-- Brands -->
 <section class="bg-white py-12">
     <div class="container mx-auto px-4">
         <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Thương Hiệu Nổi Bật</h2>
         <div class="grid grid-cols-3 md:grid-cols-6 gap-8">
             @foreach(['Nike', 'Adidas', 'Puma', 'Converse', 'Vans', 'New Balance'] as $brand)
-            <a href="#" class="bg-gray-100 rounded-lg p-6 flex items-center justify-center hover:bg-gray-200 transition">
-                <span class="text-xl font-bold text-gray-600">{{ $brand }}</span>
+            <a href="{{ route('products.by-brand', Str::slug($brand)) }}" class="bg-gray-100 rounded-lg p-6 flex items-center justify-center hover:bg-gray-200 transition group">
+                <span class="text-xl font-bold text-gray-600 group-hover:text-blue-600 transition">{{ $brand }}</span>
             </a>
             @endforeach
         </div>
