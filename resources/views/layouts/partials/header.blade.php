@@ -44,9 +44,6 @@
                             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <i class="fas fa-box mr-2"></i>Đơn hàng
                             </a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-heart mr-2"></i>Yêu thích
-                            </a>
                             <hr class="my-2">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -63,10 +60,6 @@
                     </a>
                 @endauth
                 
-                <a href="#" class="hidden md:flex flex-col items-center text-gray-700 hover:text-blue-600 transition">
-                    <i class="fas fa-heart text-xl mb-1"></i>
-                    <span class="text-xs">Yêu thích</span>
-                </a>
                 <a href="#" class="flex flex-col items-center text-gray-700 hover:text-blue-600 transition relative">
                     <i class="fas fa-shopping-cart text-xl mb-1"></i>
                     <span class="text-xs">Giỏ hàng</span>
@@ -97,7 +90,6 @@
                 <li><a href="#" class="text-gray-700 hover:text-blue-600 transition">NỮ</a></li>
                 <li><a href="#" class="text-gray-700 hover:text-blue-600 transition">TRẺ EM</a></li>
                 <li><a href="#" class="text-gray-700 hover:text-blue-600 transition">THƯƠNG HIỆU</a></li>
-                <li><a href="#" class="text-red-600 hover:text-red-700 transition font-bold">🔥 SALE</a></li>
                 <li><a href="#" class="text-gray-700 hover:text-blue-600 transition">LIÊN HỆ</a></li>
             </ul>
         </div>
