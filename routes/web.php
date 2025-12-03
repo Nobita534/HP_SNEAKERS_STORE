@@ -12,8 +12,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Route hiển thị tất cả sản phẩm
+Route::get('/san-pham', [ProductController::class, 'index'])->name('products.index');
+
 // Route hiển thị sản phẩm theo thương hiệu
 Route::get('/thuong-hieu/{brand}', [ProductController::class, 'byBrand'])->name('products.by-brand');
+
+// Route hiển thị chi tiết sản phẩm
+Route::get('/san-pham/{slug}', [ProductController::class, 'show'])->name('products.show');
 
 // Authentication Routes
 Route::middleware('guest')->group(function () {

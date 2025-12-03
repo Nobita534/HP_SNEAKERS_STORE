@@ -9,6 +9,24 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     /**
+     * Hiển thị tất cả sản phẩm với phân trang
+     * 
+     * @return \Illuminate\View\View
+     */
+    public function index()
+    {
+        // Lấy tất cả sản phẩm với phân trang 9 sản phẩm/trang
+        $products = Product::where('is_active', true)
+            ->orderBy('created_at', 'desc')
+            ->paginate(9);
+
+        // Lấy tổng số sản phẩm
+        $totalProducts = Product::where('is_active', true)->count();
+
+        return view('products.index', compact('products', 'totalProducts'));
+    }
+
+    /**
      * Hiển thị danh sách sản phẩm theo thương hiệu với phân trang
      * 
      * @param string $brand Tên thương hiệu (có thể là slug hoặc tên gốc)
@@ -73,5 +91,27 @@ class ProductController extends Controller
         // Nếu không có trong mapping, chuyển đổi slug thành title case
         // Ví dụ: 'new-balance' -> 'New Balance'
         return ucwords(str_replace('-', ' ', $slug));
+    }
+
+    /**
+     * Hiển thị chi tiết sản phẩm
+     * 
+     * @param string $slug
+     * @return \Illuminate\View\View
+     */
+    public function show($slug)
+    {
+        $product = Product::where('slug', $slug)
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        // Lấy sản phẩm liên quan cùng thương hiệu
+        $relatedProducts = Product::where('brand', $product->brand)
+            ->where('id', '!=', $product->id)
+            ->where('is_active', true)
+            ->limit(4)
+            ->get();
+
+        return view('products.show', compact('product', 'relatedProducts'));
     }
 }

@@ -38,14 +38,22 @@
 <!-- Related Brands -->
 <section class="bg-gray-100 py-8">
     <div class="container mx-auto px-4">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Khám phá thương hiệu khác</h2>
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
-            @foreach(['Nike', 'Adidas', 'Puma', 'Converse', 'Vans', 'New Balance'] as $brand)
-            @if($brand !== $brandName)
-            <a href="{{ route('products.by-brand', Str::slug($brand)) }}" class="bg-white rounded-lg p-6 flex items-center justify-center hover:bg-blue-50 hover:shadow-md transition">
-                <span class="text-lg font-bold text-gray-600">{{ $brand }}</span>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Khám phá thương hiệu khác</h2>
+        <div class="flex flex-wrap justify-center items-center gap-4">
+            <a href="{{ route('products.index') }}"
+                class="bg-white rounded-lg px-8 py-4 flex items-center justify-center hover:bg-blue-50 hover:shadow-md transition">
+                <span class="text-lg font-bold text-gray-600">
+                    Tất cả
+                </span>
             </a>
-            @endif
+            @foreach(['Nike', 'Adidas', 'Puma', 'Converse', 'Vans'] as $brand)
+            <a href="{{ route('products.by-brand', Str::slug($brand)) }}"
+                class="bg-white rounded-lg px-8 py-4 flex items-center justify-center hover:bg-blue-50 hover:shadow-md transition
+                      {{ $brand === $brandName ? 'ring-2 ring-blue-600 bg-blue-50' : '' }}">
+                <span class="text-lg font-bold {{ $brand === $brandName ? 'text-blue-600' : 'text-gray-600' }}">
+                    {{ $brand }}
+                </span>
+            </a>
             @endforeach
         </div>
     </div>
@@ -95,24 +103,9 @@
             <div class="relative overflow-hidden">
                 <!-- Product Image -->
                 <img
-                    src="https://via.placeholder.com/400x300/3B82F6/FFFFFF?text={{ urlencode($product->brand) }}"
+                    src="{{ asset($product->image) }}"
                     alt="{{ $product->name }}"
                     class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
-
-                <!-- Badges -->
-                <div class="absolute top-4 left-4 flex flex-col gap-2">
-                    @if($product->is_new)
-                    <span class="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                        MỚI
-                    </span>
-                    @endif
-
-                    @if($product->sale_price && $product->sale_price < $product->price)
-                        <span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                            -{{ $product->discount_percent }}%
-                        </span>
-                        @endif
-                </div>
 
                 <!-- Quick Actions -->
                 <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -143,29 +136,10 @@
                 <!-- Price -->
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        @if($product->sale_price && $product->sale_price < $product->price)
-                            <div class="flex items-center gap-2">
-                                <span class="text-2xl font-bold text-red-600">
-                                    {{ number_format($product->sale_price, 0, ',', '.') }}đ
-                                </span>
-                                <span class="text-sm text-gray-500 line-through">
-                                    {{ number_format($product->price, 0, ',', '.') }}đ
-                                </span>
-                            </div>
-                            @else
-                            <span class="text-2xl font-bold text-gray-800">
-                                {{ number_format($product->price, 0, ',', '.') }}đ
-                            </span>
-                            @endif
+                        <span class="text-2xl font-bold text-gray-800">
+                            {{ number_format($product->price, 0, ',', '.') }}đ
+                        </span>
                     </div>
-
-                    <!-- Rating -->
-                    @if($product->rating > 0)
-                    <div class="flex items-center text-yellow-500">
-                        <i class="fas fa-star text-sm"></i>
-                        <span class="ml-1 text-sm font-semibold text-gray-700">{{ $product->rating }}</span>
-                    </div>
-                    @endif
                 </div>
 
                 <!-- Stock Status -->
