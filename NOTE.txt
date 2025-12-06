@@ -1,4 +1,11 @@
-[6/12]
+# TEMPLATE:
+[DATE - MÃ COMMIT]
+- Content 1
+- Content 2
+- Content 3 
+...
+
+[6/12 - 6f0d661]
 - Sửa việc lưu tồn kho giày theo size
 - Hệ thống giỏ hàng
 - Thông báo đẹp hơn
@@ -7,3 +14,4 @@
 - Tính năng quản lí thông tin user (của user), kèm chức năng đổi mật khẩu
 - Sửa hiển thị slider hình ảnh ở home là top 5 sản phẩm có giá trị tồn kho lớn nhất
 - Chỉnh sửa phần chọn thương hiệu ở body cho đẹp hơn
+...
