@@ -14,7 +14,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category')->orderBy('id', 'asc')->paginate(20);
+        $products = Product::with(['category', 'productSizes'])->orderBy('id', 'asc')->paginate(20);
         return view('admin.products.index', compact('products'));
     }
 
@@ -35,9 +35,11 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'brand' => 'required|string|max:100',
+            'brand' => 'required|in:Nike,Adidas,Puma,Converse,Vans',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'sizes' => 'required|array|min:1',
+            'sizes.*.size' => 'required|string|max:10',
+            'sizes.*.quantity' => 'required|integer|min:0',
             'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
@@ -71,7 +73,16 @@ class ProductController extends Controller
             $validated['image'] = 'images/products/' . $categorySlug . '/' . $imageName;
         }
 
-        Product::create($validated);
+        // Tạo sản phẩm
+        $product = Product::create($validated);
+
+        // Tạo các size với số lượng tương ứng
+        foreach ($request->sizes as $sizeData) {
+            $product->productSizes()->create([
+                'size' => trim($sizeData['size']),
+                'quantity' => $sizeData['quantity']
+            ]);
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công!');
     }
@@ -89,7 +100,7 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('productSizes')->findOrFail($id);
         $categories = Category::all();
         return view('admin.products.edit', compact('product', 'categories'));
     }
@@ -104,9 +115,11 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
-            'brand' => 'required|string|max:100',
+            'brand' => 'required|in:Nike,Adidas,Puma,Converse,Vans',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
+            'sizes' => 'required|array|min:1',
+            'sizes.*.size' => 'required|string|max:10',
+            'sizes.*.quantity' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
@@ -140,6 +153,15 @@ class ProductController extends Controller
         }
 
         $product->update($validated);
+
+        // Sync sizes: Xóa tất cả size cũ và tạo mới
+        $product->productSizes()->delete();
+        foreach ($request->sizes as $sizeData) {
+            $product->productSizes()->create([
+                'size' => trim($sizeData['size']),
+                'quantity' => $sizeData['quantity']
+            ]);
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công!');
     }

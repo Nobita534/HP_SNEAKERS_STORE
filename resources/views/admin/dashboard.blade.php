@@ -86,25 +86,10 @@
     <!-- Quick Actions -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h3 class="text-lg font-bold text-gray-800 mb-4">Thao tác nhanh</h3>
-        <div class="grid grid-cols-2 gap-4">
-            <a href="{{ route('admin.products.create') }}" class="flex flex-col items-center justify-center p-6 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
-                <i class="fas fa-plus-circle text-4xl text-blue-600 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Thêm sản phẩm</span>
-            </a>
-            
-            <a href="{{ route('admin.orders.index') }}" class="flex flex-col items-center justify-center p-6 bg-green-50 hover:bg-green-100 rounded-lg transition">
-                <i class="fas fa-list text-4xl text-green-600 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Xem đơn hàng</span>
-            </a>
-            
-            <a href="{{ route('admin.users.index') }}" class="flex flex-col items-center justify-center p-6 bg-purple-50 hover:bg-purple-100 rounded-lg transition">
-                <i class="fas fa-users text-4xl text-purple-600 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Quản lý user</span>
-            </a>
-            
-            <a href="{{ route('home') }}" class="flex flex-col items-center justify-center p-6 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
-                <i class="fas fa-eye text-4xl text-gray-600 mb-2"></i>
-                <span class="text-sm font-medium text-gray-700">Xem website</span>
+        <div class="flex justify-center">
+            <a href="{{ route('admin.products.create') }}" class="flex flex-col items-center justify-center p-8 bg-blue-50 hover:bg-blue-100 rounded-lg transition w-full max-w-xs">
+                <i class="fas fa-plus-circle text-5xl text-blue-600 mb-3"></i>
+                <span class="text-lg font-medium text-gray-700">Thêm sản phẩm mới</span>
             </a>
         </div>
     </div>

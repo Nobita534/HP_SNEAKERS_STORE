@@ -35,7 +35,10 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-600">{{ $product->category->name }}</td>
                     <td class="px-6 py-4 text-sm font-semibold text-gray-800">{{ number_format($product->price, 0, ',', '.') }}đ</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ $product->stock }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-600">
+                        {{ $product->getTotalStock() }}
+                        <span class="text-xs text-gray-400">({{ $product->productSizes->count() }} sizes)</span>
+                    </td>
                     <td class="px-6 py-4 text-sm">
                         <div class="flex gap-2">
                             <a href="{{ route('admin.products.edit', $product) }}" class="text-blue-600 hover:text-blue-800">

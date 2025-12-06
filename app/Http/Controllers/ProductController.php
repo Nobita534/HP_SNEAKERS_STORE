@@ -13,17 +13,34 @@ class ProductController extends Controller
      * 
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Lấy tất cả sản phẩm với phân trang 9 sản phẩm/trang
-        $products = Product::where('is_active', true)
-            ->orderBy('created_at', 'desc')
-            ->paginate(9);
+        $query = Product::where('is_active', true);
+
+        // Xử lý sắp xếp
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->paginate(9)->appends(['sort' => $sort]);
 
         // Lấy tổng số sản phẩm
         $totalProducts = Product::where('is_active', true)->count();
 
-        return view('products.index', compact('products', 'totalProducts'));
+        return view('products.index', compact('products', 'totalProducts', 'sort'));
     }
 
     /**
@@ -32,25 +49,57 @@ class ProductController extends Controller
      * @param string $brand Tên thương hiệu (có thể là slug hoặc tên gốc)
      * @return \Illuminate\View\View
      */
-    public function byBrand($brand)
+    public function byBrand(Request $request, $brand)
     {
         // Chuyển đổi slug về tên thương hiệu gốc
-        // Ví dụ: 'new-balance' -> 'New Balance'
         $brandName = $this->convertSlugToBrandName($brand);
 
-        // Lấy danh sách sản phẩm theo thương hiệu với phân trang 6 sản phẩm/trang
-        $products = Product::where('brand', 'LIKE', $brandName)
-            ->where('is_active', true)
-            ->orderBy('created_at', 'desc')
-            ->paginate(6);
+        $query = Product::where('brand', 'LIKE', $brandName)
+            ->where('is_active', true);
+
+        // Xử lý sắp xếp
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->paginate(6)->appends(['sort' => $sort]);
 
         // Kiểm tra xem có sản phẩm nào không
         if ($products->isEmpty() && $products->currentPage() === 1) {
             // Thử tìm kiếm không phân biệt hoa thường
-            $products = Product::whereRaw('LOWER(brand) = ?', [strtolower($brandName)])
-                ->where('is_active', true)
-                ->orderBy('created_at', 'desc')
-                ->paginate(6);
+            $query = Product::whereRaw('LOWER(brand) = ?', [strtolower($brandName)])
+                ->where('is_active', true);
+            
+            // Áp dụng lại sắp xếp
+            switch ($sort) {
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'name':
+                    $query->orderBy('name', 'asc');
+                    break;
+                default:
+                    $query->orderBy('created_at', 'desc');
+                    break;
+            }
+            
+            $products = $query->paginate(6)->appends(['sort' => $sort]);
         }
 
         // Lấy tổng số sản phẩm của thương hiệu
@@ -58,7 +107,7 @@ class ProductController extends Controller
             ->where('is_active', true)
             ->count();
 
-        return view('products.by-brand', compact('products', 'brandName', 'totalProducts'));
+        return view('products.by-brand', compact('products', 'brandName', 'totalProducts', 'sort'));
     }
 
     /**
@@ -96,17 +145,19 @@ class ProductController extends Controller
     /**
      * Hiển thị chi tiết sản phẩm
      * 
-     * @param string $slug
+     * @param int $id
      * @return \Illuminate\View\View
      */
-    public function show($slug)
+    public function show($id)
     {
-        $product = Product::where('slug', $slug)
+        $product = Product::with('productSizes')
+            ->where('id', $id)
             ->where('is_active', true)
             ->firstOrFail();
 
         // Lấy sản phẩm liên quan cùng thương hiệu
-        $relatedProducts = Product::where('brand', $product->brand)
+        $relatedProducts = Product::with('productSizes')
+            ->where('brand', $product->brand)
             ->where('id', '!=', $product->id)
             ->where('is_active', true)
             ->limit(4)
@@ -114,4 +165,158 @@ class ProductController extends Controller
 
         return view('products.show', compact('product', 'relatedProducts'));
     }
+
+    /**
+     * Hiển thị danh sách sản phẩm theo giới tính/độ tuổi
+     * 
+     * @param string $gender
+     * @return \Illuminate\View\View
+     */
+    public function byGender(Request $request, $gender)
+    {
+        // Map gender từ URL sang category name trong DB
+        $categoryMap = [
+            'nam' => 'Nam',
+            'nu' => 'Nữ', 
+            'tre-em' => 'Trẻ Em'
+        ];
+
+        if (!isset($categoryMap[$gender])) {
+            abort(404);
+        }
+
+        $categoryName = $categoryMap[$gender];
+        
+        // Tìm category theo name
+        $category = \App\Models\Category::where('name', $categoryName)->first();
+        
+        if (!$category) {
+            abort(404);
+        }
+
+        $query = Product::where('category_id', $category->id)
+                       ->where('is_active', true);
+
+        // Xử lý sắp xếp
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->paginate(6)->appends(['sort' => $sort]);
+
+        // Tổng số sản phẩm
+        $totalProducts = Product::where('category_id', $category->id)
+                               ->where('is_active', true)
+                               ->count();
+
+        return view('products.by-gender', compact('products', 'categoryName', 'totalProducts', 'gender', 'sort'));
+    }
+
+    /**
+     * Tìm kiếm sản phẩm theo tên hoặc thương hiệu
+     * 
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
+    public function search(Request $request)
+    {
+        $keyword = $request->get('q', '');
+        $query = Product::where('is_active', true);
+
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('name', 'LIKE', '%' . $keyword . '%')
+                  ->orWhere('brand', 'LIKE', '%' . $keyword . '%')
+                  ->orWhere('description', 'LIKE', '%' . $keyword . '%');
+            });
+        }
+
+        // Xử lý sắp xếp
+        $sort = $request->get('sort', 'newest');
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $products = $query->paginate(9)->appends(['q' => $keyword, 'sort' => $sort]);
+        $totalProducts = $query->count();
+
+        return view('products.search', compact('products', 'keyword', 'totalProducts', 'sort'));
+    }
+
+    /**
+     * API: Gợi ý tìm kiếm (AJAX autocomplete)
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function searchSuggestions(Request $request)
+    {
+        $keyword = $request->get('q', '');
+        
+        if (strlen($keyword) < 2) {
+            return response()->json([]);
+        }
+
+        // Tìm sản phẩm theo tên hoặc mô tả
+        $products = Product::where('name', 'like', "%{$keyword}%")
+            ->orWhere('brand', 'like', "%{$keyword}%")
+            ->orWhere('description', 'like', "%{$keyword}%")
+            ->with('category')
+            ->orderBy('created_at', 'desc')
+            ->limit(8)
+            ->get()
+            ->map(function($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'brand' => $product->brand,
+                    'price' => number_format($product->price, 0, ',', '.'),
+                    'image' => asset($product->image), // ← Thêm asset() ở đây
+                    'url' => route('products.show', $product->id)
+                ];
+            });
+
+        // Tìm thương hiệu phù hợp
+        $brands = Product::select('brand')
+            ->where('brand', 'like', "%{$keyword}%")
+            ->groupBy('brand')
+            ->limit(3)
+            ->get()
+            ->map(function($item) {
+                return [
+                    'name' => $item->brand,
+                    'url' => route('products.by-brand', \Illuminate\Support\Str::slug($item->brand))
+                ];
+            });
+
+        return response()->json([
+            'products' => $products,
+            'brands' => $brands
+        ]);
+        }
 }

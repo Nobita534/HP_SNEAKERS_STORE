@@ -18,29 +18,25 @@
                     </a>
                 </div>
             </div>
-
+            {{-- Ở đây load top 5 sản phầm còn số lượng tồn kho nhiều nhất lên slider --}}
             <!-- Image Slider -->
             <div class="relative hidden md:block">
                 <div class="slider-container relative h-96 rounded-2xl overflow-hidden shadow-2xl">
                     <div class="slider-wrapper flex transition-transform duration-500 ease-in-out h-full">
-                        <div class="slide min-w-full h-full">
-                            <img src="{{ asset('image/nike/100.jpg') }}" alt="Nike Sneakers" class="w-full h-full object-cover">
+                        @foreach($topStockProducts as $product)
+                        <div class="slide min-w-full h-full relative">
+                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-6 left-6 text-white">
+                                <h3 class="text-2xl font-bold mb-2">{{ $product->name }}</h3>
+                                <p class="text-sm mb-1">{{ $product->brand }}</p>
+                                <p class="text-lg font-semibold">{{ number_format($product->price, 0, ',', '.') }}đ</p>
+                                <span class="inline-block mt-2 bg-green-500 text-white text-xs px-3 py-1 rounded-full">
+                                    Còn {{ $product->getTotalStock() }} sản phẩm
+                                </span>
+                            </div>
                         </div>
-                        <div class="slide min-w-full h-full">
-                            <img src="{{ asset('image/adidas/120.jpg') }}" alt="Adidas Sneakers" class="w-full h-full object-cover">
-                        </div>
-                        <div class="slide min-w-full h-full">
-                            <img src="{{ asset('image/converse/150.jpg') }}" alt="Converse Sneakers" class="w-full h-full object-cover">
-                        </div>
-                        <div class="slide min-w-full h-full">
-                            <img src="{{ asset('image/nike/103.jpg') }}" alt="Nike Air Force" class="w-full h-full object-cover">
-                        </div>
-                        <div class="slide min-w-full h-full">
-                            <img src="{{ asset('image/adidas/123.jpg') }}" alt="Adidas Stan Smith" class="w-full h-full object-cover">
-                        </div>
-                        <div class="slide min-w-full h-full">
-                            <img src="{{ asset('image/converse/153.jpg') }}" alt="Converse Chuck 70" class="w-full h-full object-cover">
-                        </div>
+                        @endforeach
                     </div>
 
                     <!-- Navigation Buttons -->
@@ -57,12 +53,9 @@
 
                     <!-- Dots Indicator -->
                     <div class="slider-dots absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                        <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="0"></button>
-                        <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="1"></button>
-                        <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="2"></button>
-                        <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="3"></button>
-                        <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="4"></button>
-                        <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="5"></button>
+                        @foreach($topStockProducts as $index => $product)
+                        <button class="dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition" data-index="{{ $index }}"></button>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -70,21 +63,31 @@
     </div>
 </section>
 
-<!-- Brands -->
-<section class="bg-white py-12">
+<!-- Brand Logos Section -->
+<section class="bg-white py-12 border-t border-b border-gray-200">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Thương Hiệu Nổi Bật</h2>
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-8">
-            @foreach(['Nike', 'Adidas', 'Puma', 'Converse', 'Vans', 'New Balance'] as $brand)
-            <a href="{{ route('products.by-brand', Str::slug($brand)) }}" class="bg-gray-100 rounded-lg p-6 flex items-center justify-center hover:bg-gray-200 transition group">
-                <span class="text-xl font-bold text-gray-600 group-hover:text-blue-600 transition">{{ $brand }}</span>
+        <h3 class="text-center text-gray-600 text-sm font-semibold mb-8 uppercase tracking-wider">Thương hiệu hàng đầu</h3>
+        <div class="flex flex-wrap items-center justify-center gap-12 md:gap-16">
+            <a href="{{ url('/thuong-hieu/nike') }}" class="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="{{ asset('images/brands/nike-logo.png') }}" alt="Nike" class="h-12 md:h-16 object-contain">
             </a>
-            @endforeach
+            <a href="{{ url('/thuong-hieu/adidas') }}" class="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="{{ asset('images/brands/adidas-logo.png') }}" alt="Adidas" class="h-12 md:h-16 object-contain">
+            </a>
+            <a href="{{ url('/thuong-hieu/puma') }}" class="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="{{ asset('images/brands/puma-logo.png') }}" alt="Puma" class="h-12 md:h-16 object-contain">
+            </a>
+            <a href="{{ url('/thuong-hieu/converse') }}" class="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="{{ asset('images/brands/converse-logo.png') }}" alt="Converse" class="h-12 md:h-16 object-contain">
+            </a>
+            <a href="{{ url('/thuong-hieu/vans') }}" class="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="{{ asset('images/brands/vans-logo.png') }}" alt="Vans" class="h-12 md:h-16 object-contain">
+            </a>
         </div>
     </div>
 </section>
 
-<!-- Featured Products -->
+{{-- <!-- Featured Products --}
 <section class="container mx-auto px-4 py-12">
     <div class="flex justify-between items-center mb-8">
         <div>
@@ -111,7 +114,7 @@
                             <span class="text-2xl font-bold">{{ number_format($product->price, 0, ',', '.') }}đ</span>
                             @endif
                         </div>
-                        <a href="#" class="bg-white text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                        <a href="{{ route('products.show', $product->id) }}" class="bg-white text-gray-800 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
                             Chi tiết
                         </a>
                     </div>
@@ -120,7 +123,7 @@
         </div>
         @endforeach
     </div>
-</section>
+</section> --}}
 
 @endsection
 

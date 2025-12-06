@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tất cả sản phẩm - HP Sneakers')
+@section('title', 'Sản phẩm ' . $categoryName . ' - HP Sneakers')
 
 @section('content')
 <!-- Breadcrumb -->
@@ -12,17 +12,17 @@
                 Trang chủ
             </a>
             <i class="fas fa-chevron-right mx-3 text-xs"></i>
-            <span class="text-gray-800 font-medium">Tất cả sản phẩm</span>
+            <span class="text-gray-800 font-medium">{{ $categoryName }}</span>
         </nav>
     </div>
 </div>
 
-<!-- Page Header -->
+<!-- Category Header -->
 <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-4xl md:text-5xl font-bold mb-2">Tất Cả Sản Phẩm</h1>
+                <h1 class="text-4xl md:text-5xl font-bold mb-2">{{ $categoryName }}</h1>
                 <p class="text-blue-100 text-lg">
                     <i class="fas fa-box mr-2"></i>
                     {{ $totalProducts }} sản phẩm có sẵn
@@ -31,6 +31,30 @@
             <div class="hidden md:block">
                 <i class="fas fa-shoe-prints text-6xl opacity-30"></i>
             </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Categories -->
+<section class="bg-gray-100 py-8">
+    <div class="container mx-auto px-4">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Khám phá danh mục khác</h2>
+        <div class="flex flex-wrap justify-center items-center gap-4">
+            <a href="{{ route('products.index') }}"
+                class="bg-white rounded-lg px-8 py-4 flex items-center justify-center hover:bg-blue-50 hover:shadow-md transition">
+                <span class="text-lg font-bold text-gray-600">
+                    Tất cả
+                </span>
+            </a>
+            @foreach(['nam' => 'Nam', 'nu' => 'Nữ', 'tre-em' => 'Trẻ Em'] as $slug => $name)
+            <a href="{{ url('/gioi-tinh/' . $slug) }}"
+                class="bg-white rounded-lg px-8 py-4 flex items-center justify-center hover:bg-blue-50 hover:shadow-md transition
+                      {{ $slug === $gender ? 'ring-2 ring-blue-600 bg-blue-50' : '' }}">
+                <span class="text-lg font-bold {{ $slug === $gender ? 'text-blue-600' : 'text-gray-600' }}">
+                    {{ $name }}
+                </span>
+            </a>
+            @endforeach
         </div>
     </div>
 </section>
@@ -45,7 +69,7 @@
         </div>
         <h2 class="text-2xl font-bold text-gray-800 mb-3">Không tìm thấy sản phẩm</h2>
         <p class="text-gray-600 mb-8">
-            Hiện tại chúng tôi chưa có sản phẩm nào.
+            Hiện tại chúng tôi chưa có sản phẩm nào trong danh mục <strong>{{ $categoryName }}</strong>.
         </p>
         <a href="{{ route('home') }}" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition">
             <i class="fas fa-arrow-left mr-2"></i>
@@ -63,7 +87,7 @@
         <!-- Sort Options -->
         <div class="flex items-center gap-2">
             <label for="sort" class="text-gray-600 text-sm">Sắp xếp:</label>
-            <select id="sort" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="window.location.href='{{ route('products.index') }}?sort=' + this.value">
+            <select id="sort" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="window.location.href='{{ url()->current() }}?sort=' + this.value">
                 <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Mới nhất</option>
                 <option value="price_asc" {{ $sort === 'price_asc' ? 'selected' : '' }}>Giá tăng dần</option>
                 <option value="price_desc" {{ $sort === 'price_desc' ? 'selected' : '' }}>Giá giảm dần</option>
@@ -78,12 +102,10 @@
         <div class="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-all duration-300">
             <div class="relative overflow-hidden">
                 <!-- Product Image -->
-                <a href="{{ route('products.show', $product->id) }}">
-                    <img
-                        src="{{ asset($product->image) }}"
-                        alt="{{ $product->name }}"
-                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
-                </a>
+                <img
+                    src="{{ asset($product->image) }}"
+                    alt="{{ $product->name }}"
+                    class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
 
                 <!-- Quick Actions -->
                 <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -105,11 +127,9 @@
             <!-- Product Details -->
             <div class="p-5">
                 <div class="mb-3">
-                    <a href="{{ route('products.show', $product->id) }}">
-                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition">
-                            {{ $product->name }}
-                        </h3>
-                    </a>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition">
+                        {{ $product->name }}
+                    </h3>
                     <p class="text-sm text-gray-600">{{ $product->brand }}</p>
                 </div>
 
@@ -170,13 +190,13 @@
             @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
             @if ($page == $products->currentPage())
             {{-- Active Page --}}
-            <span class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white font-semibold rounded">
+            <span class="w-10 h-10 flex items-center justify-center bg-black text-white font-semibold rounded">
                 {{ $page }}
             </span>
             @else
             {{-- Other Pages --}}
             <a href="{{ $url }}"
-                class="w-10 h-10 flex items-center justify-center bg-white text-gray-700 font-semibold rounded hover:bg-gray-100 transition border border-gray-300">
+                class="w-10 h-10 flex items-center justify-center bg-white text-gray-700 font-semibold rounded hover:bg-gray-100 transition">
                 {{ $page }}
             </a>
             @endif
@@ -185,7 +205,7 @@
             {{-- Next Page Arrow --}}
             @if ($products->hasMorePages())
             <a href="{{ $products->nextPageUrl() }}"
-                class="w-10 h-10 flex items-center justify-center bg-white text-gray-700 rounded hover:bg-gray-100 transition border border-gray-300"
+                class="w-10 h-10 flex items-center justify-center bg-white text-gray-700 rounded hover:bg-gray-100 transition"
                 aria-label="Trang sau">
                 <i class="fas fa-arrow-right"></i>
             </a>
@@ -193,7 +213,7 @@
         </nav>
         @else
         {{-- Display when only 1 page --}}
-        <span class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white font-semibold rounded">
+        <span class="w-10 h-10 flex items-center justify-center bg-black text-white font-semibold rounded">
             1
         </span>
         @endif
@@ -210,3 +230,4 @@
     });
 </script>
 @endpush
+

@@ -87,11 +87,11 @@
         <!-- Sort Options (có thể mở rộng sau) -->
         <div class="flex items-center gap-2">
             <label for="sort" class="text-gray-600 text-sm">Sắp xếp:</label>
-            <select id="sort" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="newest">Mới nhất</option>
-                <option value="price_asc">Giá tăng dần</option>
-                <option value="price_desc">Giá giảm dần</option>
-                <option value="name">Tên A-Z</option>
+            <select id="sort" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="window.location.href='{{ url()->current() }}?sort=' + this.value">
+                <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Mới nhất</option>
+                <option value="price_asc" {{ $sort === 'price_asc' ? 'selected' : '' }}>Giá tăng dần</option>
+                <option value="price_desc" {{ $sort === 'price_desc' ? 'selected' : '' }}>Giá giảm dần</option>
+                <option value="name" {{ $sort === 'name' ? 'selected' : '' }}>Tên A-Z</option>
             </select>
         </div>
     </div>
@@ -144,15 +144,20 @@
 
                 <!-- Stock Status -->
                 <div class="mb-4">
-                    @if($product->stock > 10)
+                    @php
+                        $totalStock = $product->getTotalStock();
+                        $availableSizes = $product->getAvailableSizes();
+                    @endphp
+                    
+                    @if($totalStock > 10)
                     <span class="text-xs text-green-600 font-medium">
                         <i class="fas fa-check-circle mr-1"></i>
                         Còn hàng
                     </span>
-                    @elseif($product->stock > 0)
+                    @elseif($totalStock > 0)
                     <span class="text-xs text-orange-600 font-medium">
                         <i class="fas fa-exclamation-circle mr-1"></i>
-                        Chỉ còn {{ $product->stock }} sản phẩm
+                        Chỉ còn {{ $totalStock }} sản phẩm
                     </span>
                     @else
                     <span class="text-xs text-red-600 font-medium">
@@ -164,13 +169,13 @@
 
                 <!-- Actions -->
                 <div class="flex gap-2">
-                    <button class="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    <a href="{{ route('products.show', $product->id) }}" class="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition text-center">
                         <i class="fas fa-shopping-cart mr-2"></i>
                         Thêm vào giỏ
-                    </button>
-                    <button class="bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-gray-200 transition">
+                    </a>
+                    <a href="{{ route('products.show', $product->id) }}" class="bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg font-semibold hover:bg-gray-200 transition flex items-center justify-center">
                         <i class="fas fa-eye"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
