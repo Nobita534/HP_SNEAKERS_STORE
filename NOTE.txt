@@ -1,0 +1,9 @@
+[6/12]
+- Sửa việc lưu tồn kho giày theo size
+- Hệ thống giỏ hàng
+- Thông báo đẹp hơn
+- Hiển thị phân loại Giới tính/Độ tuổi, Thương hiệu (dropdown option). 
+- Tính năng tìm kiếm giày hoặc thương hiệu
+- Tính năng quản lí thông tin user (của user), kèm chức năng đổi mật khẩu
+- Sửa hiển thị slider hình ảnh ở home là top 5 sản phẩm có giá trị tồn kho lớn nhất
+- Chỉnh sửa phần chọn thương hiệu ở body cho đẹp hơn
