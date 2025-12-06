@@ -31,10 +31,7 @@
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4 text-sm text-gray-800">{{ $product->id }}</td>
                     <td class="px-6 py-4">
-                        <div class="flex items-center">
-                            <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-12 h-12 rounded object-cover mr-3">
-                            <span class="text-sm font-medium text-gray-800">{{ $product->name }}</span>
-                        </div>
+                        <span class="text-sm font-medium text-gray-800">{{ $product->name }}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-600">{{ $product->category->name }}</td>
                     <td class="px-6 py-4 text-sm font-semibold text-gray-800">{{ number_format($product->price, 0, ',', '.') }}đ</td>

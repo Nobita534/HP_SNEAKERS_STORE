@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(20);
+        $users = User::orderBy('id', 'asc')->paginate(20);
         return view('admin.users.index', compact('users'));
     }
 
@@ -46,7 +46,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -54,7 +55,17 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required|in:admin,user',
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('admin.users.index')->with('success', 'Cập nhật người dùng thành công!');
     }
 
     /**
@@ -62,6 +73,20 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+        
+        // Không cho phép xóa admin
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.users.index')->with('error', 'Không thể xóa tài khoản admin!');
+        }
+        
+        // Không cho phép xóa chính mình
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')->with('error', 'Không thể xóa chính bạn!');
+        }
+        
+        $user->delete();
+        
+        return redirect()->route('admin.users.index')->with('success', 'Xóa người dùng thành công!');
     }
 }
