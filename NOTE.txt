@@ -16,4 +16,12 @@
 - Chỉnh sửa phần chọn thương hiệu ở body cho đẹp hơn
 ...
 
-
+[16/12 - abc1234]
+- Tái cấu trúc database seeders theo brand (Nike, Adidas, Converse, Puma)
+- Tách ProductSeeder thành 4 file riêng, dễ quản lý
+- Cập nhật CategorySeeder với tên ngắn gọn (Nam, Nữ, Trẻ Em, Sale)
+- Thêm link từ slider images trang chủ đến chi tiết sản phẩm
+- Thêm cart preview khi hover vào icon giỏ hàng
+- Hiển thị sản phẩm trong giỏ với quick access
+- Tổng 63 sản phẩm được seed vào database
+...
