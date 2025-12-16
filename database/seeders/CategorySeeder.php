@@ -14,32 +14,32 @@ class CategorySeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Giày Nam',
+                'name' => 'Nam',
                 'slug' => 'giay-nam',
                 'description' => 'Bộ sưu tập giày thể thao dành cho nam',
                 'icon' => 'fa-mars',
-                'is_active' => true,
+                'is_active' => 1,
             ],
             [
-                'name' => 'Giày Nữ',
+                'name' => 'Nữ',
                 'slug' => 'giay-nu',
                 'description' => 'Bộ sưu tập giày thể thao dành cho nữ',
                 'icon' => 'fa-venus',
-                'is_active' => true,
+                'is_active' => 1,
             ],
             [
-                'name' => 'Giày Trẻ Em',
+                'name' => 'Trẻ Em',
                 'slug' => 'giay-tre-em',
                 'description' => 'Giày thể thao cho trẻ em',
                 'icon' => 'fa-child',
-                'is_active' => true,
+                'is_active' => 1,
             ],
             [
-                'name' => 'Giày Sale',
+                'name' => 'Sale',
                 'slug' => 'giay-sale',
                 'description' => 'Sản phẩm giảm giá',
                 'icon' => 'fa-fire',
-                'is_active' => true,
+                'is_active' => 1,
             ],
         ];
 

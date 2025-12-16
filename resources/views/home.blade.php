@@ -24,7 +24,7 @@
                 <div class="slider-container relative h-96 rounded-2xl overflow-hidden shadow-2xl">
                     <div class="slider-wrapper flex transition-transform duration-500 ease-in-out h-full">
                         @foreach($topStockProducts as $product)
-                        <div class="slide min-w-full h-full relative">
+                        <a href="{{ route('products.show', $product->id) }}" class="slide min-w-full h-full relative">
                             <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                             <div class="absolute bottom-6 left-6 text-white">
@@ -35,7 +35,7 @@
                                     Còn {{ $product->getTotalStock() }} sản phẩm
                                 </span>
                             </div>
-                        </div>
+                        </a>
                         @endforeach
                     </div>
 

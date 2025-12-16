@@ -82,7 +82,7 @@ class ProductController extends Controller
             // Thử tìm kiếm không phân biệt hoa thường
             $query = Product::whereRaw('LOWER(brand) = ?', [strtolower($brandName)])
                 ->where('is_active', true);
-            
+
             // Áp dụng lại sắp xếp
             switch ($sort) {
                 case 'price_asc':
@@ -98,7 +98,7 @@ class ProductController extends Controller
                     $query->orderBy('created_at', 'desc');
                     break;
             }
-            
+
             $products = $query->paginate(6)->appends(['sort' => $sort]);
         }
 
@@ -177,7 +177,7 @@ class ProductController extends Controller
         // Map gender từ URL sang category name trong DB
         $categoryMap = [
             'nam' => 'Nam',
-            'nu' => 'Nữ', 
+            'nu' => 'Nữ',
             'tre-em' => 'Trẻ Em'
         ];
 
@@ -186,16 +186,16 @@ class ProductController extends Controller
         }
 
         $categoryName = $categoryMap[$gender];
-        
+
         // Tìm category theo name
         $category = \App\Models\Category::where('name', $categoryName)->first();
-        
+
         if (!$category) {
             abort(404);
         }
 
         $query = Product::where('category_id', $category->id)
-                       ->where('is_active', true);
+            ->where('is_active', true);
 
         // Xử lý sắp xếp
         $sort = $request->get('sort', 'newest');
@@ -219,8 +219,8 @@ class ProductController extends Controller
 
         // Tổng số sản phẩm
         $totalProducts = Product::where('category_id', $category->id)
-                               ->where('is_active', true)
-                               ->count();
+            ->where('is_active', true)
+            ->count();
 
         return view('products.by-gender', compact('products', 'categoryName', 'totalProducts', 'gender', 'sort'));
     }
@@ -237,10 +237,10 @@ class ProductController extends Controller
         $query = Product::where('is_active', true);
 
         if ($keyword) {
-            $query->where(function($q) use ($keyword) {
+            $query->where(function ($q) use ($keyword) {
                 $q->where('name', 'LIKE', '%' . $keyword . '%')
-                  ->orWhere('brand', 'LIKE', '%' . $keyword . '%')
-                  ->orWhere('description', 'LIKE', '%' . $keyword . '%');
+                    ->orWhere('brand', 'LIKE', '%' . $keyword . '%')
+                    ->orWhere('description', 'LIKE', '%' . $keyword . '%');
             });
         }
 
@@ -277,7 +277,7 @@ class ProductController extends Controller
     public function searchSuggestions(Request $request)
     {
         $keyword = $request->get('q', '');
-        
+
         if (strlen($keyword) < 2) {
             return response()->json([]);
         }
@@ -290,7 +290,7 @@ class ProductController extends Controller
             ->orderBy('created_at', 'desc')
             ->limit(8)
             ->get()
-            ->map(function($product) {
+            ->map(function ($product) {
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
@@ -307,7 +307,7 @@ class ProductController extends Controller
             ->groupBy('brand')
             ->limit(3)
             ->get()
-            ->map(function($item) {
+            ->map(function ($item) {
                 return [
                     'name' => $item->brand,
                     'url' => route('products.by-brand', \Illuminate\Support\Str::slug($item->brand))
@@ -318,5 +318,5 @@ class ProductController extends Controller
             'products' => $products,
             'brands' => $brands
         ]);
-        }
+    }
 }

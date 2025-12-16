@@ -68,10 +68,13 @@
                         <span class="text-xs">Đăng nhập</span>
                     </a>
                 @endauth
-                
-                <a href="{{ route('cart.index') }}" class="flex flex-col items-center text-gray-700 hover:text-blue-600 transition relative">
-                    <i class="fas fa-shopping-cart text-xl mb-1"></i>
-                    <span class="text-xs">Giỏ hàng</span>
+
+                <!-- Cart -->
+                <div class="flex flex-col items-center text-gray-700 hover:text-blue-600 transition relative group">
+                    <a href="{{ route('cart.index') }}" class="flex flex-col items-center">
+                        <i class="fas fa-shopping-cart text-xl mb-1"></i>
+                        <span class="text-xs">Giỏ hàng</span>
+                    </a>
                     @php
                         $cart = null;
                         if (Auth::check()) {
@@ -80,11 +83,64 @@
                             $cart = \App\Models\Cart::where('session_id', Session::getId())->first();
                         }
                         $cartCount = $cart ? $cart->getTotalItems() : 0;
+                        $cartItems = $cart ? $cart->items()->with('product')->limit(4)->get() : collect();
                     @endphp
                     @if($cartCount > 0)
                     <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{{ $cartCount }}</span>
                     @endif
-                </a>
+
+                    <!-- Invisible bridge area để giữ hover state -->
+                    <div class="absolute left-0 right-0 top-full h-2 opacity-0 group-hover:opacity-0"></div>
+
+                    <!-- Cart dropdown -->
+                    <div class="absolute right-0 top-full pt-2 w-80 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none group-hover:pointer-events-auto">
+                        <div class="bg-white rounded-lg shadow-xl border border-gray-200">
+                        @if($cartCount > 0)
+                            <!-- Cart Items -->
+                            <div class="p-4">
+                                <h3 class="text-sm font-semibold text-gray-800 mb-3">Sản phẩm mới thêm</h3>
+                                <div class="space-y-3 max-h-64 overflow-y-auto">
+                                    @foreach($cartItems as $item)
+                                    <div class="flex gap-3 items-start hover:bg-gray-50 p-2 rounded-lg transition">
+                                        <img src="{{ asset($item->product->image) }}" 
+                                             alt="{{ $item->product->name }}" 
+                                             class="w-16 h-16 object-cover rounded-lg">
+                                        <div class="flex-1 min-w-0">
+                                            <h4 class="text-sm font-medium text-gray-800 truncate">{{ $item->product->name }}</h4>
+                                            <p class="text-xs text-gray-500">Size: {{ $item->size }}</p>
+                                            <div class="flex items-center justify-between mt-1">
+                                                <span class="text-xs text-gray-600">SL: {{ $item->quantity }}</span>
+                                                <span class="text-sm font-semibold text-blue-600">{{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}đ</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Cart Footer -->
+                            <div class="border-t border-gray-200 p-4 bg-gray-50 rounded-b-lg">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-sm font-medium text-gray-700">Tổng cộng ({{ $cartCount }} sản phẩm):</span>
+                                    <span class="text-lg font-bold text-blue-600">{{ number_format($cart->getTotal(), 0, ',', '.') }}đ</span>
+                                </div>
+                                <a href="{{ route('cart.index') }}" class="block w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                                    Xem giỏ hàng
+                                </a>
+                            </div>
+                        @else
+                            <!-- Empty Cart -->
+                            <div class="p-8 text-center">
+                                <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-3"></i>
+                                <p class="text-gray-500 text-sm">Chưa có hàng nào trong giỏ!</p>
+                                <a href="{{ route('products.index') }}" class="inline-block mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                    Mua sắm ngay →
+                                </a>
+                            </div>
+                        @endif
+                        </div>
+                    </div>                    
+                </div>
             </div>
         </div>
 
