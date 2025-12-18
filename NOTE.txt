@@ -25,3 +25,9 @@
 - Hiển thị sản phẩm trong giỏ với quick access
 - Tổng 63 sản phẩm được seed vào database
 ...
+
+[18/12 - 8a8afb1]
+- Fix lỗi cart preview không cập nhật khi thêm sản phẩm vào giỏ
+- Xử lý trường hợp giỏ hàng trống → có items (rebuild toàn bộ dropdown)
+- Fix cart preview hoạt động cho cả guest, user đã đăng nhập và admin
+...
