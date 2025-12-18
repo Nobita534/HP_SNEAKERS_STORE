@@ -39,7 +39,7 @@ class CartController extends Controller
     {
         $cart = $this->getCart();
         $cartItems = $cart->items()->with('product')->get();
-        
+
         return view('cart.index', compact('cart', 'cartItems'));
     }
 
@@ -81,7 +81,7 @@ class CartController extends Controller
         if ($existingItem) {
             // Update quantity
             $newQuantity = $existingItem->quantity + $quantity;
-            
+
             if ($productSize->quantity < $newQuantity) {
                 return response()->json([
                     'success' => false,
@@ -102,10 +102,31 @@ class CartController extends Controller
             ]);
         }
 
+        // Refresh cart to get updated data
+        $cart->refresh();
+        $latestItems = $cart->items()
+            ->with('product')
+            ->latest()
+            ->limit(4)
+            ->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Đã thêm vào giỏ hàng',
-            'cart_count' => $cart->getTotalItems()
+            'cart_count' => $cart->getTotalItems(),
+            'cart_total' => $cart->getTotal(),
+            'cart_items' => $latestItems->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'product_name' => $item->product->name,
+                    'product_image' => asset($item->product->image),
+                    'product_url' => route('products.show', $item->product->id),
+                    'size' => $item->size,
+                    'quantity' => $item->quantity,
+                    'price' => $item->product->sale_price ?? $item->product->price,
+                    'subtotal' => $item->quantity * ($item->product->sale_price ?? $item->product->price)
+                ];
+            })
         ]);
     }
 
@@ -119,7 +140,7 @@ class CartController extends Controller
         ]);
 
         $cartItem = CartItem::findOrFail($id);
-        
+
         // Check stock
         $productSize = ProductSize::where('product_id', $cartItem->product_id)
             ->where('size', $cartItem->size)

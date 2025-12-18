@@ -311,6 +311,112 @@
             if (onCancel) onCancel();
         });
     };
+    
+    // Format price to Vietnamese currency format
+    window.formatPrice = function(price) {
+        return new Intl.NumberFormat('vi-VN').format(price);
+    };
+    
+    // Update Cart UI dynamically
+    window.updateCartUI = function(data) {
+        // Update cart count badge
+        const badge = document.querySelector('.cart-count');
+        if (badge) {
+            badge.textContent = data.cart_count;
+        } else if (data.cart_count > 0) {
+            // Create badge if doesn't exist
+            const cartLink = document.querySelector('a[href="{{ route("cart.index") }}"]');
+            if (cartLink) {
+                const newBadge = document.createElement('span');
+                newBadge.className = 'cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center';
+                newBadge.textContent = data.cart_count;
+                cartLink.appendChild(newBadge);
+            }
+        }
+        
+        // Check if cart was empty before
+        const emptyState = document.querySelector('.cart-empty-state');
+        const dropdownContent = document.getElementById('cart-dropdown-content');
+        
+        if (emptyState && data.cart_items && data.cart_items.length > 0) {
+            // Cart was empty, now has items - rebuild entire dropdown
+            let html = `
+                <div class="p-4">
+                    <h3 class="text-sm font-semibold text-gray-800 mb-3">Sản phẩm mới thêm</h3>
+                    <div class="cart-items-container space-y-3 max-h-64 overflow-y-auto">
+            `;
+            
+            data.cart_items.forEach(item => {
+                html += `
+                    <div class="flex gap-3 items-start hover:bg-gray-50 p-2 rounded-lg transition">
+                        <img src="${item.product_image}" 
+                             alt="${item.product_name}" 
+                             class="w-16 h-16 object-cover rounded-lg">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-medium text-gray-800 truncate">${item.product_name}</h4>
+                            <p class="text-xs text-gray-500">Size: ${item.size}</p>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-xs text-gray-600">SL: ${item.quantity}</span>
+                                <span class="text-sm font-semibold text-blue-600">${formatPrice(item.subtotal)}đ</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                </div>
+                <div class="border-t border-gray-200 p-4 bg-gray-50 rounded-b-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-sm font-medium text-gray-700">Tổng cộng (<span class="cart-count-text">${data.cart_count}</span> sản phẩm):</span>
+                        <span class="cart-total text-lg font-bold text-blue-600">${formatPrice(data.cart_total)}đ</span>
+                    </div>
+                    <a href="{{ route('cart.index') }}" class="block w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition font-medium">
+                        Xem giỏ hàng
+                    </a>
+                </div>
+            `;
+            
+            dropdownContent.innerHTML = html;
+        } else {
+            // Cart already has items, just update the existing elements
+            const itemsContainer = document.querySelector('.cart-items-container');
+            if (itemsContainer && data.cart_items && data.cart_items.length > 0) {
+                let html = '';
+                data.cart_items.forEach(item => {
+                    html += `
+                        <div class="flex gap-3 items-start hover:bg-gray-50 p-2 rounded-lg transition">
+                            <img src="${item.product_image}" 
+                                 alt="${item.product_name}" 
+                                 class="w-16 h-16 object-cover rounded-lg">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-medium text-gray-800 truncate">${item.product_name}</h4>
+                                <p class="text-xs text-gray-500">Size: ${item.size}</p>
+                                <div class="flex items-center justify-between mt-1">
+                                    <span class="text-xs text-gray-600">SL: ${item.quantity}</span>
+                                    <span class="text-sm font-semibold text-blue-600">${formatPrice(item.subtotal)}đ</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                itemsContainer.innerHTML = html;
+                
+                // Update total price
+                const totalElement = document.querySelector('.cart-total');
+                if (totalElement && data.cart_total) {
+                    totalElement.textContent = formatPrice(data.cart_total) + 'đ';
+                }
+                
+                // Update count text in footer
+                const countText = document.querySelector('.cart-count-text');
+                if (countText) {
+                    countText.textContent = data.cart_count;
+                }
+            }
+        }
+    };
     </script>
     
     @stack('scripts')

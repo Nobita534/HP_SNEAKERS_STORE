@@ -245,20 +245,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Success notification
                 showToast(data.message, 'success');
                 
-                // Update cart count in header
-                const cartCount = document.querySelector('.cart-count');
-                if (cartCount) {
-                    // Update existing badge
-                    cartCount.textContent = data.cart_count;
-                } else if (data.cart_count > 0) {
-                    // Create new badge if it doesn't exist
-                    const cartLink = document.querySelector('a[href="{{ route("cart.index") }}"]');
-                    if (cartLink) {
-                        const badge = document.createElement('span');
-                        badge.className = 'cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center';
-                        badge.textContent = data.cart_count;
-                        cartLink.appendChild(badge);
-                    }
+                // Update cart UI (badge and preview dropdown)
+                if (typeof updateCartUI === 'function') {
+                    updateCartUI(data);
                 }
             } else {
                 showToast(data.message, 'error');

@@ -45,9 +45,11 @@
 
                 <!-- Password -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                        Mật khẩu
-                    </label>
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="password" class="block text-sm font-medium text-gray-700">
+                            Mật khẩu
+                        </label>
+                    </div>
                     <div class="relative">
                         <input 
                             id="password" 

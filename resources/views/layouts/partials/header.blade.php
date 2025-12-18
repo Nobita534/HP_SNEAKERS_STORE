@@ -94,12 +94,12 @@
 
                     <!-- Cart dropdown -->
                     <div class="absolute right-0 top-full pt-2 w-80 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none group-hover:pointer-events-auto">
-                        <div class="bg-white rounded-lg shadow-xl border border-gray-200">
+                        <div id="cart-dropdown-content" class="bg-white rounded-lg shadow-xl border border-gray-200">
                         @if($cartCount > 0)
                             <!-- Cart Items -->
                             <div class="p-4">
                                 <h3 class="text-sm font-semibold text-gray-800 mb-3">Sản phẩm mới thêm</h3>
-                                <div class="space-y-3 max-h-64 overflow-y-auto">
+                                <div class="cart-items-container space-y-3 max-h-64 overflow-y-auto">
                                     @foreach($cartItems as $item)
                                     <div class="flex gap-3 items-start hover:bg-gray-50 p-2 rounded-lg transition">
                                         <img src="{{ asset($item->product->image) }}" 
@@ -121,8 +121,8 @@
                             <!-- Cart Footer -->
                             <div class="border-t border-gray-200 p-4 bg-gray-50 rounded-b-lg">
                                 <div class="flex justify-between items-center mb-3">
-                                    <span class="text-sm font-medium text-gray-700">Tổng cộng ({{ $cartCount }} sản phẩm):</span>
-                                    <span class="text-lg font-bold text-blue-600">{{ number_format($cart->getTotal(), 0, ',', '.') }}đ</span>
+                                    <span class="text-sm font-medium text-gray-700">Tổng cộng (<span class="cart-count-text">{{ $cartCount }}</span> sản phẩm):</span>
+                                    <span class="cart-total text-lg font-bold text-blue-600">{{ number_format($cart->getTotal(), 0, ',', '.') }}đ</span>
                                 </div>
                                 <a href="{{ route('cart.index') }}" class="block w-full bg-blue-600 text-white text-center py-2 rounded-lg hover:bg-blue-700 transition font-medium">
                                     Xem giỏ hàng
@@ -130,7 +130,7 @@
                             </div>
                         @else
                             <!-- Empty Cart -->
-                            <div class="p-8 text-center">
+                            <div class="cart-empty-state p-8 text-center">
                                 <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-3"></i>
                                 <p class="text-gray-500 text-sm">Chưa có hàng nào trong giỏ!</p>
                                 <a href="{{ route('products.index') }}" class="inline-block mt-4 text-blue-600 hover:text-blue-700 text-sm font-medium">

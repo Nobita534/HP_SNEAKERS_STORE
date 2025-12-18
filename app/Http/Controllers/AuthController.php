@@ -6,7 +6,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password as PasswordRules;
 
 class AuthController extends Controller
 {
@@ -26,12 +29,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            
+
             // Redirect admin về dashboard, user về home
-            $redirectTo = auth()->user()->role === 'admin' 
-                ? route('admin.dashboard') 
+            $redirectTo = auth()->user()->role === 'admin'
+                ? route('admin.dashboard')
                 : route('home');
-            
+
             return redirect()->intended($redirectTo)->with('success', 'Đăng nhập thành công!');
         }
 
@@ -52,7 +55,7 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::min(8)],
+            'password' => ['required', 'confirmed', PasswordRules::min(8)],
         ]);
 
         $user = User::create([
@@ -70,10 +73,10 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect('/')->with('success', 'Đăng xuất thành công!');
     }
 }
