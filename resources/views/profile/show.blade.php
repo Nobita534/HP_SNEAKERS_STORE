@@ -66,7 +66,7 @@
                                 <p class="text-sm text-gray-600">{{ $order->created_at->format('d/m/Y H:i') }}</p>
                             </div>
                             <div class="text-right">
-                                <p class="font-bold text-lg">{{ number_format($order->total_amount) }}đ</p>
+                                <p class="font-bold text-lg">{{ number_format($order->total) }}đ</p>
                                 <span class="inline-block px-2 py-1 text-xs rounded 
                                     @if($order->status == 'pending') bg-yellow-100 text-yellow-800
                                     @elseif($order->status == 'processing') bg-blue-100 text-blue-800

@@ -25,23 +25,86 @@
                     <td class="px-6 py-4">
                         <span class="px-3 py-1 text-xs font-semibold rounded-full
                             @if($order->status === 'pending') bg-yellow-100 text-yellow-800
-                            @elseif($order->status === 'confirmed') bg-blue-100 text-blue-800
+                            @elseif($order->status === 'processing') bg-blue-100 text-blue-800
                             @elseif($order->status === 'shipping') bg-purple-100 text-purple-800
-                            @elseif($order->status === 'delivered') bg-green-100 text-green-800
-                            @else bg-red-100 text-red-800
+                            @elseif(in_array($order->status, ['completed', 'delivered'])) bg-green-100 text-green-800
+                            @elseif($order->status === 'cancelled') bg-red-100 text-red-800
+                            @else bg-gray-100 text-gray-800
                             @endif">
-                            {{ ucfirst($order->status) }}
+                            @if($order->status === 'pending') Chờ xử lý
+                            @elseif($order->status === 'processing') Đang xử lý
+                            @elseif($order->status === 'shipping') Đang giao
+                            @elseif($order->status === 'completed') Hoàn thành
+                            @elseif($order->status === 'delivered') Đã giao
+                            @elseif($order->status === 'cancelled') Đã hủy
+                            @else {{ ucfirst($order->status) }}
+                            @endif
                         </span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-600">{{ $order->created_at->format('d/m/Y H:i') }}</td>
                     <td class="px-6 py-4 text-sm">
                         <div class="flex gap-2">
-                            <a href="{{ route('admin.orders.show', $order) }}" class="text-blue-600 hover:text-blue-800">
+                            <a href="{{ route('admin.orders.show', $order) }}" 
+                               class="text-blue-600 hover:text-blue-800" 
+                               title="Xem chi tiết">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="{{ route('admin.orders.edit', $order) }}" class="text-green-600 hover:text-green-800">
-                                <i class="fas fa-edit"></i>
-                            </a>
+                            
+                            @if($order->status === 'pending')
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="status" value="processing">
+                                    <button type="submit" 
+                                            class="text-green-600 hover:text-green-800" 
+                                            title="Xác nhận đơn hàng"
+                                            onclick="return confirm('Xác nhận đơn hàng này?')">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                </form>
+                            @endif
+
+                            @if($order->status === 'processing')
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="status" value="shipping">
+                                    <button type="submit" 
+                                            class="text-purple-600 hover:text-purple-800" 
+                                            title="Chuyển đang giao"
+                                            onclick="return confirm('Chuyển trạng thái sang đang giao?')">
+                                        <i class="fas fa-shipping-fast"></i>
+                                    </button>
+                                </form>
+                            @endif
+
+                            @if($order->status === 'shipping')
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="status" value="completed">
+                                    <button type="submit" 
+                                            class="text-green-600 hover:text-green-800" 
+                                            title="Hoàn thành đơn"
+                                            onclick="return confirm('Đánh dấu đơn hàng đã hoàn thành?')">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>
+                                </form>
+                            @endif
+
+                            @if(in_array($order->status, ['pending', 'processing']))
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="status" value="cancelled">
+                                    <button type="submit" 
+                                            class="text-red-600 hover:text-red-800" 
+                                            title="Hủy đơn hàng"
+                                            onclick="return confirm('Hủy đơn hàng này? Tồn kho sẽ được hoàn trả.')">
+                                        <i class="fas fa-times-circle"></i>
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </td>
                 </tr>

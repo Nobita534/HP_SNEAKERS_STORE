@@ -17,15 +17,15 @@ class AdminController extends Controller
             'total_users' => User::where('role', 'user')->count(),
             'total_products' => Product::count(),
             'total_orders' => Order::count(),
-            'total_revenue' => Order::where('status', 'delivered')->sum('total'),
+            'total_revenue' => Order::whereIn('status', ['completed', 'delivered'])->sum('total'),
             'pending_orders' => Order::where('status', 'pending')->count(),
-            'monthly_revenue' => Order::where('status', 'delivered')
+            'monthly_revenue' => Order::whereIn('status', ['completed', 'delivered'])
                 ->whereMonth('created_at', now()->month)
                 ->sum('total'),
         ];
 
         // Doanh thu 7 ngày gần đây
-        $revenueChart = Order::where('status', 'delivered')
+        $revenueChart = Order::whereIn('status', ['completed', 'delivered'])
             ->where('created_at', '>=', now()->subDays(7))
             ->select(
                 DB::raw('DATE(created_at) as date'),

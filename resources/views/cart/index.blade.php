@@ -71,10 +71,12 @@
                             </span>
                         </div>
                     </div>
-
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">
-                        Tiến hành thanh toán
-                    </button>
+                    <form action="{{route('vnpayment')}}" method="POST">
+                        @csrf
+                        <button name="redirect" type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition cursor-pointer">
+                            Tiến hành thanh toán
+                        </button>
+                    </form>
                     
                     <a href="{{ route('products.index') }}" 
                        class="block text-center mt-4 text-blue-600 hover:text-blue-700">

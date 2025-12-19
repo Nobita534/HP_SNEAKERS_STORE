@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Cache;
@@ -70,4 +71,15 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 
     // Order Management
     Route::resource('orders', AdminOrderController::class);
+    Route::put('/orders/{id}/update-status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
 });
+
+// VNPay Payment Routes
+Route::middleware(['auth'])->group(function () {
+    Route::post('/vnpay/payment', [PaymentController::class, 'vnpay_payment'])
+        ->name('vnpayment');
+});
+
+// Return URL không cần auth vì VNPay gọi callback
+Route::get('/vnpay/return', [PaymentController::class, 'vnpayReturn'])
+    ->name('vnpay.return');
