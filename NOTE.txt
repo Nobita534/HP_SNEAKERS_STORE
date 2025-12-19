@@ -31,3 +31,18 @@
 - Xử lý trường hợp giỏ hàng trống → có items (rebuild toàn bộ dropdown)
 - Fix cart preview hoạt động cho cả guest, user đã đăng nhập và admin
 ...
+
+[19/12 - 23d69b3]
+- Thêm chức năng thanh toán online bằng VNPay
+- Tích hợp VNPay payment gateway:
+  + Tạo PaymentController với phương thức tạo URL thanh toán VNPay
+  + Xử lý callback từ VNPay (vnpay_return) sau khi thanh toán
+  + Xác thực chữ ký (secure hash) từ VNPay để đảm bảo giao dịch hợp lệ
+  + Cập nhật trạng thái đơn hàng tự động dựa trên kết quả thanh toán
+- Tạo model VnpayTransaction để lưu lịch sử giao dịch
+- Thêm chức năng quản lý đơn hàng cho Admin (xem chi tiết, cập nhật trạng thái)
+- Thêm trường completed_at trong bảng orders để tracking thời gian hoàn thành
+- Cải thiện giao diện trang quản lý đơn hàng của Admin với bộ lọc trạng thái
+- Tạo trang xem chi tiết đơn hàng cho Admin (thông tin khách hàng, sản phẩm, thanh toán)
+- Cải thiện UI trang giỏ hàng với button thanh toán VNPay
+...
