@@ -51,56 +51,56 @@
                             </a>
                             
                             @if($order->status === 'pending')
-                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline status-form">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="status" value="processing">
-                                    <button type="submit" 
-                                            class="text-green-600 hover:text-green-800" 
+                                    <button type="button" 
+                                            class="text-green-600 hover:text-green-800 status-btn" 
                                             title="Xác nhận đơn hàng"
-                                            onclick="return confirm('Xác nhận đơn hàng này?')">
+                                            data-message="Xác nhận đơn hàng này?">
                                         <i class="fas fa-check-circle"></i>
                                     </button>
                                 </form>
                             @endif
 
                             @if($order->status === 'processing')
-                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline status-form">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="status" value="shipping">
-                                    <button type="submit" 
-                                            class="text-purple-600 hover:text-purple-800" 
+                                    <button type="button" 
+                                            class="text-purple-600 hover:text-purple-800 status-btn" 
                                             title="Chuyển đang giao"
-                                            onclick="return confirm('Chuyển trạng thái sang đang giao?')">
+                                            data-message="Chuyển trạng thái sang đang giao?">
                                         <i class="fas fa-shipping-fast"></i>
                                     </button>
                                 </form>
                             @endif
 
                             @if($order->status === 'shipping')
-                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline status-form">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="status" value="completed">
-                                    <button type="submit" 
-                                            class="text-green-600 hover:text-green-800" 
+                                    <button type="button" 
+                                            class="text-green-600 hover:text-green-800 status-btn" 
                                             title="Hoàn thành đơn"
-                                            onclick="return confirm('Đánh dấu đơn hàng đã hoàn thành?')">
+                                            data-message="Đánh dấu đơn hàng đã hoàn thành?">
                                         <i class="fas fa-check-double"></i>
                                     </button>
                                 </form>
                             @endif
 
                             @if(in_array($order->status, ['pending', 'processing']))
-                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.orders.update-status', $order->id) }}" method="POST" class="inline status-form">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="status" value="cancelled">
-                                    <button type="submit" 
-                                            class="text-red-600 hover:text-red-800" 
+                                    <button type="button" 
+                                            class="text-red-600 hover:text-red-800 status-btn" 
                                             title="Hủy đơn hàng"
-                                            onclick="return confirm('Hủy đơn hàng này? Tồn kho sẽ được hoàn trả.')">
+                                            data-message="Hủy đơn hàng này? Tồn kho sẽ được hoàn trả.">
                                         <i class="fas fa-times-circle"></i>
                                     </button>
                                 </form>
@@ -125,3 +125,24 @@
     </div>
 @endif
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Status update confirmation
+    document.querySelectorAll('.status-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const form = this.closest('.status-form');
+            const message = this.dataset.message;
+            showConfirm(
+                'Thông báo',
+                message,
+                () => {
+                    form.submit();
+                }
+            );
+        });
+    });
+});
+</script>
+@endpush

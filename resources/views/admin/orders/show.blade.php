@@ -195,9 +195,8 @@
                             @endif
                         </select>
 
-                        <button type="submit" 
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
-                                onclick="return confirm('Xác nhận thay đổi trạng thái?')">
+                        <button type="button" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition update-status-btn">
                             <i class="fas fa-save mr-2"></i>Cập nhật trạng thái
                         </button>
                     </form>
@@ -232,3 +231,24 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update status confirmation
+    const updateBtn = document.querySelector('.update-status-btn');
+    if (updateBtn) {
+        updateBtn.addEventListener('click', function() {
+            const form = this.closest('form');
+            showConfirm(
+                'Thông báo',
+                'Xác nhận thay đổi trạng thái?',
+                () => {
+                    form.submit();
+                }
+            );
+        });
+    }
+});
+</script>
+@endpush

@@ -46,3 +46,7 @@
 - Tạo trang xem chi tiết đơn hàng cho Admin (thông tin khách hàng, sản phẩm, thanh toán)
 - Cải thiện UI trang giỏ hàng với button thanh toán VNPay
 ...
+
+[19/12 - ]
+- Chỉnh UX các thông báo xác nhận (showConfirm) trong admin dashboard
+- Thêm chỉnh sửa thông tin địa chỉ trong xem thông tin user (kết nối api địa chỉ của Việt Nam)

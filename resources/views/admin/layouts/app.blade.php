@@ -117,6 +117,56 @@
         </div>
     </div>
 
+    <!-- Confirm Dialog -->
+    <div id="confirm-dialog" class="hidden fixed inset-0 flex items-center justify-center z-50" style="background-color: rgba(0, 0, 0, 0.1);">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 animate-fade-in">
+            <div class="p-6">
+                <h3 id="confirm-title" class="text-xl font-bold text-gray-800 mb-2">Thông báo</h3>
+                <p id="confirm-message" class="text-gray-600 mb-6"></p>
+                <div class="flex gap-3 justify-end">
+                    <button id="confirm-cancel" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
+                        Hủy
+                    </button>
+                    <button id="confirm-ok" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Custom Confirm Dialog
+    window.showConfirm = function(title, message, onConfirm, onCancel) {
+        const dialog = document.getElementById('confirm-dialog');
+        const titleEl = document.getElementById('confirm-title');
+        const messageEl = document.getElementById('confirm-message');
+        const okBtn = document.getElementById('confirm-ok');
+        const cancelBtn = document.getElementById('confirm-cancel');
+        
+        titleEl.textContent = title;
+        messageEl.textContent = message;
+        dialog.classList.remove('hidden');
+        
+        // Remove old listeners
+        const newOkBtn = okBtn.cloneNode(true);
+        const newCancelBtn = cancelBtn.cloneNode(true);
+        okBtn.parentNode.replaceChild(newOkBtn, okBtn);
+        cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+        
+        // Add new listeners
+        newOkBtn.addEventListener('click', () => {
+            dialog.classList.add('hidden');
+            if (onConfirm) onConfirm();
+        });
+        
+        newCancelBtn.addEventListener('click', () => {
+            dialog.classList.add('hidden');
+            if (onCancel) onCancel();
+        });
+    };
+    </script>
+
     @stack('scripts')
 </body>
 </html>

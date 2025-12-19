@@ -44,10 +44,10 @@
                             <a href="{{ route('admin.products.edit', $product) }}" class="text-blue-600 hover:text-blue-800">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline">
+                            <form action="{{ route('admin.products.destroy', $product) }}" method="POST" class="inline delete-form">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Xóa sản phẩm này?')">
+                                <button type="button" class="text-red-600 hover:text-red-800 delete-btn">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
@@ -71,3 +71,23 @@
     </div>
 @endif
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Delete product confirmation
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const form = this.closest('.delete-form');
+            showConfirm(
+                'Thông báo',
+                'Bạn có chắc muốn xóa sản phẩm này?',
+                () => {
+                    form.submit();
+                }
+            );
+        });
+    });
+});
+</script>
+@endpush

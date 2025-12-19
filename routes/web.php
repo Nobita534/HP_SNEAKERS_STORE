@@ -57,6 +57,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/tai-khoan/cap-nhat', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/tai-khoan/doi-mat-khau', [ProfileController::class, 'editPassword'])->name('profile.edit-password');
     Route::put('/tai-khoan/cap-nhat-mat-khau', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+    
+    // Address Routes
+    Route::post('/profile/addresses', [ProfileController::class, 'storeAddress'])->name('profile.addresses.store');
+    Route::get('/profile/addresses/{id}', [ProfileController::class, 'getAddress'])->name('profile.addresses.show');
+    Route::put('/profile/addresses/{id}', [ProfileController::class, 'updateAddress'])->name('profile.addresses.update');
+    Route::delete('/profile/addresses/{id}', [ProfileController::class, 'deleteAddress'])->name('profile.addresses.destroy');
+    Route::put('/profile/addresses/{id}/set-default', [ProfileController::class, 'setDefaultAddress'])->name('profile.addresses.set-default');
 });
 
 // Admin Routes

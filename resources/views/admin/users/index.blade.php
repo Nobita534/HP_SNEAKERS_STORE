@@ -34,10 +34,10 @@
                                 <i class="fas fa-edit"></i>
                             </a>
                             @if($user->role !== 'admin')
-                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
+                                <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800" onclick="return confirm('Xóa người dùng này?')">
+                                    <button type="button" class="text-red-600 hover:text-red-800 delete-btn">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -62,3 +62,23 @@
     </div>
 @endif
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Delete user confirmation
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const form = this.closest('.delete-form');
+            showConfirm(
+                'Thông báo',
+                'Bạn có chắc muốn xóa người dùng này?',
+                () => {
+                    form.submit();
+                }
+            );
+        });
+    });
+});
+</script>
+@endpush
