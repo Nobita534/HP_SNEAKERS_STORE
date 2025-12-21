@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -64,6 +65,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/addresses/{id}', [ProfileController::class, 'updateAddress'])->name('profile.addresses.update');
     Route::delete('/profile/addresses/{id}', [ProfileController::class, 'deleteAddress'])->name('profile.addresses.destroy');
     Route::put('/profile/addresses/{id}/set-default', [ProfileController::class, 'setDefaultAddress'])->name('profile.addresses.set-default');
+    
+    // Order Routes
+    Route::get('/don-hang', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/don-hang/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/don-hang/{id}/huy', [OrderController::class, 'cancel'])->name('orders.cancel');
 });
 
 // Admin Routes

@@ -177,18 +177,27 @@ class PaymentController extends Controller
 
                 // Lấy thông tin user để làm shipping info
                 $user = Auth::user();
+                
+                // Lấy địa chỉ mặc định của user
+                $defaultAddress = $user->addresses()->where('is_default', true)->first();
+                
+                // Nếu không có địa chỉ mặc định, lấy địa chỉ đầu tiên
+                if (!$defaultAddress) {
+                    $defaultAddress = $user->addresses()->first();
+                }
 
                 // Tạo Order
                 $order = Order::create([
                     'order_number' => $vnp_TxnRef,
                     'user_id' => Auth::id(),
-                    'shipping_name' => $user->name,
-                    'shipping_phone' => $user->phone ?? '0000000000',
+                    'address_id' => $defaultAddress ? $defaultAddress->id : null,
+                    'shipping_name' => $defaultAddress ? $defaultAddress->name : $user->name,
+                    'shipping_phone' => $defaultAddress ? $defaultAddress->phone : ($user->phone ?? '0000000000'),
                     'shipping_email' => $user->email,
-                    'shipping_address' => $user->address ?? 'Chưa cập nhật',
-                    'shipping_city' => $user->city ?? 'TP.HCM',
-                    'shipping_district' => $user->district ?? 'Quận 1',
-                    'shipping_ward' => $user->ward ?? 'Phường 1',
+                    'shipping_address' => $defaultAddress ? $defaultAddress->address : ($user->address ?? 'Chưa cập nhật'),
+                    'shipping_city' => $defaultAddress ? $defaultAddress->city : ($user->city ?? 'TP.HCM'),
+                    'shipping_district' => $defaultAddress ? $defaultAddress->district : ($user->district ?? 'Quận 1'),
+                    'shipping_ward' => $defaultAddress ? $defaultAddress->ward : ($user->ward ?? 'Phường 1'),
                     'subtotal' => $vnp_Amount,
                     'shipping_fee' => 0,
                     'discount' => 0,

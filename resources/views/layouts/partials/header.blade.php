@@ -1,12 +1,10 @@
 <header class="bg-white shadow-md sticky top-0 z-50">
     <!-- Main Header -->
-    <div class="container mx-auto px-4 py-4">
+    <div class="container mx-auto px-4 py-2">
         <div class="flex items-center justify-between">
             <!-- Logo -->
             <a href="/" class="flex items-center">
-                <div class="text-3xl font-bold text-blue-600">
-                    HP SNEAKERS
-                </div>
+                <img src="{{ asset('images/logo/logo_hpsneakers.png') }}" alt="HP Sneakers" class="w-60 h-23">
             </a>
 
             <!-- Search Bar -->
@@ -50,7 +48,7 @@
                             <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <i class="fas fa-user mr-2"></i>Tài khoản
                             </a>
-                            <a href="{{ route('profile.show') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <a href="{{ route('orders.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                 <i class="fas fa-box mr-2"></i>Đơn hàng
                             </a>
                             <hr class="my-2">
@@ -65,7 +63,7 @@
                 @else
                     <a href="{{ route('login') }}" class="hidden md:flex flex-col items-center text-gray-700 hover:text-blue-600 transition">
                         <i class="fas fa-user text-xl mb-1"></i>
-                        <span class="text-xs">Đăng nhập</span>
+                        <span class="text-xs">Đăng nhập/Đăng ký</span>
                     </a>
                 @endauth
 

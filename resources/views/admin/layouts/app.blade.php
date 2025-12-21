@@ -21,11 +21,11 @@
 <body class="bg-gray-100 font-sans antialiased">
     <!-- Top Navigation -->
     <header class="bg-blue-600 text-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between py-4">
+        <div class="container mx-auto px-2">
+            <div class="flex items-center justify-between py-2">
                 <!-- Logo -->
                 <div class="flex items-center">
-                    <h1 class="text-2xl font-bold">HP Sneakers</h1>
+                    <img src="{{ asset('images/logo/logoadmin_hpsneakers.png') }}" alt="HP Sneakers" class="w-60 h-23">
                     <span class="ml-3 px-3 py-1 bg-blue-500 rounded-full text-xs font-semibold">ADMIN</span>
                 </div>
                 

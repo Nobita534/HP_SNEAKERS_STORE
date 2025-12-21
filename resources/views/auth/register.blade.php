@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full">
+    <div class="max-w-3xl w-full">
         <div class="bg-white rounded-lg shadow-lg p-8">
             <!-- Header -->
             <div class="text-center mb-8">
@@ -111,6 +111,79 @@
                     </div>
                 </div>
 
+                <!-- Địa chỉ giao hàng -->
+                <div class="border-t pt-6 mt-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Địa chỉ giao hàng</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                                Số điện thoại <span class="text-red-500">*</span>
+                            </label>
+                            <input 
+                                id="phone" 
+                                name="phone" 
+                                type="tel" 
+                                value="{{ old('phone') }}"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('phone') border-red-500 @enderror"
+                                placeholder="0912345678">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Tỉnh/Thành phố <span class="text-red-500">*</span>
+                                </label>
+                                <select 
+                                    id="city" 
+                                    name="city" 
+                                    required
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                                    <option value="">Đang tải...</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="district" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Quận/Huyện
+                                </label>
+                                <select 
+                                    id="district" 
+                                    name="district" 
+                                    disabled
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                                    <option value="">Chọn Quận/Huyện</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="ward" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Phường/Xã
+                                </label>
+                                <select 
+                                    id="ward" 
+                                    name="ward" 
+                                    disabled
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+                                    <option value="">Chọn Phường/Xã</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
+                                Địa chỉ chi tiết <span class="text-red-500">*</span>
+                            </label>
+                            <textarea 
+                                id="address" 
+                                name="address" 
+                                rows="3" 
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                placeholder="Số nhà, tên đường...">{{ old('address') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Submit Button -->
                 <button 
                     type="submit"
@@ -134,6 +207,85 @@
 
 @push('scripts')
 <script>
+// API địa chỉ Việt Nam
+let provinces = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadProvinces();
+});
+
+async function loadProvinces() {
+    try {
+        const response = await fetch('https://provinces.open-api.vn/api/p/');
+        provinces = await response.json();
+        
+        const citySelect = document.getElementById('city');
+        citySelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
+        provinces.forEach(province => {
+            citySelect.innerHTML += `<option value="${province.name}" data-code="${province.code}">${province.name}</option>`;
+        });
+    } catch (error) {
+        console.error('Lỗi tải danh sách tỉnh/thành:', error);
+        document.getElementById('city').innerHTML = '<option value="">Lỗi tải dữ liệu</option>';
+    }
+}
+
+async function loadDistricts(provinceCode) {
+    try {
+        const response = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
+        const province = await response.json();
+        
+        const districtSelect = document.getElementById('district');
+        districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+        districtSelect.disabled = false;
+        
+        province.districts.forEach(district => {
+            districtSelect.innerHTML += `<option value="${district.name}" data-code="${district.code}">${district.name}</option>`;
+        });
+        
+        // Reset ward select
+        const wardSelect = document.getElementById('ward');
+        wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+        wardSelect.disabled = true;
+    } catch (error) {
+        console.error('Lỗi tải danh sách quận/huyện:', error);
+    }
+}
+
+async function loadWards(districtCode) {
+    try {
+        const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+        const district = await response.json();
+        
+        const wardSelect = document.getElementById('ward');
+        wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+        wardSelect.disabled = false;
+        
+        district.wards.forEach(ward => {
+            wardSelect.innerHTML += `<option value="${ward.name}">${ward.name}</option>`;
+        });
+    } catch (error) {
+        console.error('Lỗi tải danh sách phường/xã:', error);
+    }
+}
+
+// Event listeners
+document.getElementById('city').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const provinceCode = selectedOption.getAttribute('data-code');
+    if (provinceCode) {
+        loadDistricts(provinceCode);
+    }
+});
+
+document.getElementById('district').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    const districtCode = selectedOption.getAttribute('data-code');
+    if (districtCode) {
+        loadWards(districtCode);
+    }
+});
+
 function togglePassword(inputId, iconId) {
     const passwordInput = document.getElementById(inputId);
     const toggleIcon = document.getElementById(iconId);

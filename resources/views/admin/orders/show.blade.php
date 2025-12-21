@@ -84,14 +84,22 @@
                     <h4 class="font-semibold text-gray-700 mb-2">Thông tin khách hàng</h4>
                     <p class="text-sm text-gray-600"><strong>Tên:</strong> {{ $order->user->name }}</p>
                     <p class="text-sm text-gray-600"><strong>Email:</strong> {{ $order->user->email }}</p>
-                    <p class="text-sm text-gray-600"><strong>SĐT:</strong> {{ $order->user->phone ?? 'Chưa cập nhật' }}</p>
                 </div>
                 <div>
                     <h4 class="font-semibold text-gray-700 mb-2">Địa chỉ giao hàng</h4>
-                    <p class="text-sm text-gray-600"><strong>Người nhận:</strong> {{ $order->shipping_name }}</p>
-                    <p class="text-sm text-gray-600"><strong>SĐT:</strong> {{ $order->shipping_phone }}</p>
-                    <p class="text-sm text-gray-600"><strong>Địa chỉ:</strong> {{ $order->shipping_address }}</p>
-                    <p class="text-sm text-gray-600">{{ $order->shipping_ward }}, {{ $order->shipping_district }}, {{ $order->shipping_city }}</p>
+                    @if($order->address)
+                        {{-- Hiển thị từ bảng addresses nếu có --}}
+                        <p class="text-sm text-gray-600"><strong>Người nhận:</strong> {{ $order->address->name }}</p>
+                        <p class="text-sm text-gray-600"><strong>SĐT:</strong> {{ $order->address->phone }}</p>
+                        <p class="text-sm text-gray-600"><strong>Địa chỉ:</strong> {{ $order->address->address }}</p>
+                        <p class="text-sm text-gray-600">{{ $order->address->ward }}, {{ $order->address->district }}, {{ $order->address->city }}</p>
+                    @else
+                        {{-- Fallback về shipping fields nếu không có address --}}
+                        <p class="text-sm text-gray-600"><strong>Người nhận:</strong> {{ $order->shipping_name }}</p>
+                        <p class="text-sm text-gray-600"><strong>SĐT:</strong> {{ $order->shipping_phone }}</p>
+                        <p class="text-sm text-gray-600"><strong>Địa chỉ:</strong> {{ $order->shipping_address }}</p>
+                        <p class="text-sm text-gray-600">{{ $order->shipping_ward }}, {{ $order->shipping_district }}, {{ $order->shipping_city }}</p>
+                    @endif
                 </div>
             </div>
         </div>

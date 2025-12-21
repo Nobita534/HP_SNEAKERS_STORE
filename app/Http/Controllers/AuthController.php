@@ -55,13 +55,30 @@ class AuthController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'string', 'max:15'],
             'password' => ['required', 'confirmed', PasswordRules::min(8)],
+            'city' => ['required', 'string', 'max:255'],
+            'district' => ['nullable', 'string', 'max:255'],
+            'ward' => ['nullable', 'string', 'max:255'],
+            'address' => ['required', 'string'],
         ]);
 
+        // Tạo user 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+        ]);
+
+        // Tạo địa chỉ mặc định
+        $user->addresses()->create([
+            'name' => $validated['name'],
+            'phone' => $validated['phone'],
+            'city' => $validated['city'],
+            'district' => $validated['district'] ?? '',
+            'ward' => $validated['ward'] ?? '',
+            'address' => $validated['address'],
+            'is_default' => true,
         ]);
 
         Auth::login($user);
