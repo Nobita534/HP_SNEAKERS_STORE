@@ -32,7 +32,6 @@ class Order extends Model
         'confirmed_at',
         'shipped_at',
         'completed_at',
-        'delivered_at',
         'cancelled_at',
     ];
 
@@ -41,7 +40,6 @@ class Order extends Model
         'confirmed_at' => 'datetime',
         'shipped_at' => 'datetime',
         'completed_at' => 'datetime',
-        'delivered_at' => 'datetime',
         'cancelled_at' => 'datetime',
         'subtotal' => 'decimal:2',
         'shipping_fee' => 'decimal:2',

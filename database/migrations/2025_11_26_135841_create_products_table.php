@@ -22,13 +22,8 @@ return new class extends Migration
             $table->string('brand');
             $table->string('image')->nullable();
             $table->json('images')->nullable();
-            $table->json('sizes')->nullable();
             $table->string('color')->nullable();
-            $table->integer('stock')->default(0);
             $table->boolean('is_featured')->default(false);
-            $table->boolean('is_new')->default(true);
-            $table->decimal('rating', 3, 2)->default(0);
-            $table->integer('reviews_count')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

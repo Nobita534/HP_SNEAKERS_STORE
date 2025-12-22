@@ -44,7 +44,6 @@ return new class extends Migration
             $table->timestamp('confirmed_at')->nullable();
             $table->timestamp('shipped_at')->nullable();
             $table->timestamp('completed_at')->nullable();
-            $table->timestamp('delivered_at')->nullable();
             $table->timestamp('cancelled_at')->nullable();
 
             $table->timestamps();

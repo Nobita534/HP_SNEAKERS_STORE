@@ -20,9 +20,7 @@ class Product extends Model
         'images',
         'color',
         'is_featured',
-        'is_new',
         'rating',
-        'reviews_count',
         'is_active',
     ];
 
@@ -34,7 +32,6 @@ class Product extends Model
         'rating' => 'decimal:2',
         'images' => 'array',
         'is_featured' => 'boolean',
-        'is_new' => 'boolean',
         'is_active' => 'boolean',
     ];
 

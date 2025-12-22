@@ -32,15 +32,10 @@ class InventoryTransaction extends Model
         parent::boot();
         
         static::creating(function ($model) {
-            if (!$model->import_code) {
-                // Tạo mã phiếu nhập tự động: IMP20251222001
-                $date = now()->format('Ymd');
-                $count = static::whereDate('created_at', today())->count() + 1;
-                $model->import_code = 'IMP' . $date . str_pad($count, 3, '0', STR_PAD_LEFT);
+            // Tính tổng tiền nếu chưa có
+            if (!$model->total_cost) {
+                $model->total_cost = $model->quantity * $model->import_price;
             }
-            
-            // Tính tổng tiền
-            $model->total_cost = $model->quantity * $model->import_price;
         });
     }
 

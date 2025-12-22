@@ -72,25 +72,9 @@
                     @enderror
                 </div>
             </div>
-
-            <!-- Thông báo về nhập hàng -->
-            <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <div class="flex items-start">
-                    <i class="fas fa-info-circle text-blue-600 text-xl mr-3 mt-0.5"></i>
-                    <div>
-                        <p class="text-sm font-medium text-blue-800">Lưu ý về tồn kho</p>
-                        <p class="text-sm text-blue-700 mt-1">
-                            Sản phẩm mới sẽ được tạo với tồn kho = 0. Vui lòng sử dụng chức năng 
-                            <a href="{{ route('admin.inventory.imports.create') }}" class="font-semibold underline hover:text-blue-900">Nhập hàng</a> 
-                            để thêm size và số lượng cho sản phẩm.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <!-- Trạng thái -->
-                <div>
+                <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Trạng thái
                     </label>
@@ -98,17 +82,6 @@
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <option value="0" {{ old('is_featured', 0) == 0 ? 'selected' : '' }}>Bình thường</option>
                         <option value="1" {{ old('is_featured') == 1 ? 'selected' : '' }}>Nổi bật</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Sản phẩm mới
-                    </label>
-                    <select name="is_new"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                        <option value="0" {{ old('is_new', 0) == 0 ? 'selected' : '' }}>Không</option>
-                        <option value="1" {{ old('is_new') == 1 ? 'selected' : '' }}>Có</option>
                     </select>
                 </div>
             </div>

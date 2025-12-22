@@ -87,7 +87,7 @@
     </div>
 </section>
 
-{{-- <!-- Featured Products --}
+{{-- <!-- Featured Products Section --> --}}
 <section class="container mx-auto px-4 py-12">
     <div class="flex justify-between items-center mb-8">
         <div>
@@ -123,7 +123,7 @@
         </div>
         @endforeach
     </div>
-</section> --}}
+</section> 
 
 @endsection
 

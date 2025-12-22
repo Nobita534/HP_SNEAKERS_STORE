@@ -65,14 +65,13 @@ class InventoryImportController extends Controller
 
         DB::beginTransaction();
         try {
-            // Tạo mã phiếu nhập duy nhất
-            $date = now()->format('Ymd');
-            $count = InventoryTransaction::whereDate('created_at', today())->count() + 1;
-            $importCode = 'IMP' . $date . str_pad($count, 3, '0', STR_PAD_LEFT);
+            // Tạo mã phiếu nhập duy nhất với retry logic
+            $importCode = $this->generateUniqueImportCode();
+            $importedAt = now();
 
             $totalAmount = 0;
 
-            // Xử lý từng item
+            // Xử lý từng item (mỗi size 1 bản ghi)
             foreach ($request->items as $item) {
                 // Tạo giao dịch nhập hàng
                 $transaction = InventoryTransaction::create([
@@ -85,7 +84,7 @@ class InventoryImportController extends Controller
                     'type' => 'import',
                     'note' => $request->note ?? null,
                     'user_id' => auth()->id(),
-                    'imported_at' => now()
+                    'imported_at' => $importedAt
                 ]);
 
                 $totalAmount += $transaction->total_cost;
@@ -187,5 +186,43 @@ class InventoryImportController extends Controller
         return response()->json([
             'sizes' => $sizes
         ]);
+    }
+
+    /**
+     * Tạo mã phiếu nhập duy nhất
+     */
+    private function generateUniqueImportCode()
+    {
+        $maxRetries = 10;
+        $attempt = 0;
+
+        while ($attempt < $maxRetries) {
+            $date = now()->format('Ymd');
+            
+            // Lấy số thứ tự cao nhất trong ngày
+            $lastCode = InventoryTransaction::where('import_code', 'LIKE', 'IMP' . $date . '%')
+                ->orderBy('import_code', 'desc')
+                ->value('import_code');
+
+            if ($lastCode) {
+                $lastNumber = (int)substr($lastCode, -3);
+                $newNumber = str_pad($lastNumber + 1, 3, '0', STR_PAD_LEFT);
+            } else {
+                $newNumber = '001';
+            }
+
+            $importCode = 'IMP' . $date . $newNumber;
+
+            // Kiểm tra xem mã đã tồn tại chưa
+            $exists = InventoryTransaction::where('import_code', $importCode)->exists();
+
+            if (!$exists) {
+                return $importCode;
+            }
+
+            $attempt++;
+        }
+
+        throw new \Exception('Không thể tạo mã phiếu nhập sau ' . $maxRetries . ' lần thử');
     }
 }

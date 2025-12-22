@@ -11,8 +11,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $newProducts = Product::where('is_new', true)
-            ->where('is_active', true)
+        // Sản phẩm mới nhất (30 ngày gần đây)
+        $newProducts = Product::where('is_active', true)
+            ->where('created_at', '>=', now()->subDays(30))
             ->orderBy('created_at', 'desc')
             ->take(8)
             ->get();

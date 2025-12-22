@@ -40,7 +40,6 @@ class ProductController extends Controller
             'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
-            'is_new' => 'required|in:0,1',
         ]);
 
         $validated['is_featured'] = $request->has('is_featured') ? (bool)$request->is_featured : false;

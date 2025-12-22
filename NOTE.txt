@@ -1,6 +1,17 @@
 # RESET DATABASE
-php artisan migrate:fresh
-php artisan db:seed 
+php artisan migrate:fresh --seed
+
+#Cac san pham mau
+Nike Air Max 270 - Nam, 2.8tr  ⭐
+Adidas Ultraboost 22 - Nam, 4.5tr ⭐
+Converse Chuck Taylor - Nữ, 950k 
+Puma RS-X - Nữ, 2.3tr 
+Nike Air Force 1 - Nam, 2.6tr ⭐
+Adidas Stan Smith - Nữ, 1.8tr 
+Vans Old Skool - Nam, 1.6tr
+Nike Air Jordan 1 Mid - Nam, 3.2tr⭐
+Puma Suede Classic - Trẻ Em, 1.1tr 
+Converse One Star - Trẻ Em, 750k 
 
 # TEMPLATE:
 [DATE - MÃ COMMIT]
@@ -67,3 +78,7 @@ php artisan db:seed
 - Thêm chức năng nhập hàng, chỉnh sửa phần thêm sản phẩm
 - Tính lãi
 
+[23/12]
+- Fix lỗi nhập hàng cùng lúc 2 size
+- Sửa các file Migration (xóa các bảng, thuộc tính thừa,...)
+- Thêm seeder 10 sản phẩm trống (đủ 11 size nhưng số lượng = 0)
