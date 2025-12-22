@@ -63,4 +63,7 @@ php artisan db:seed
   + Xem chi tiết đơn hàng
   + Chức năng hủy đơn hàng (chỉ hủy được khi đơn chưa được admin xác nhận): chọn lý do hủy trong dropdown các lý do cố định...
 
+[22/12]
+- Thêm chức năng nhập hàng, chỉnh sửa phần thêm sản phẩm
+- Tính lãi
 
