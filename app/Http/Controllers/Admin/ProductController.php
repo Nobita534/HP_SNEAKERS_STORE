@@ -37,12 +37,10 @@ class ProductController extends Controller
             'category_id' => 'required|exists:categories,id',
             'brand' => 'required|in:Nike,Adidas,Puma,Converse,Vans',
             'price' => 'required|numeric|min:0',
-            'sizes' => 'required|array|min:1',
-            'sizes.*.size' => 'required|string|max:10',
-            'sizes.*.quantity' => 'required|integer|min:0',
             'image' => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'description' => 'nullable|string',
             'is_featured' => 'boolean',
+            'is_new' => 'required|in:0,1',
         ]);
 
         $validated['is_featured'] = $request->has('is_featured') ? (bool)$request->is_featured : false;
@@ -76,15 +74,15 @@ class ProductController extends Controller
         // Tạo sản phẩm
         $product = Product::create($validated);
 
-        // Tạo các size với số lượng tương ứng
-        foreach ($request->sizes as $sizeData) {
+        // Tự động tạo các size từ 35 đến 45 với số lượng = 0
+        for ($size = 35; $size <= 45; $size++) {
             $product->productSizes()->create([
-                'size' => trim($sizeData['size']),
-                'quantity' => $sizeData['quantity']
+                'size' => (string)$size,
+                'quantity' => 0
             ]);
         }
 
-        return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công!');
+        return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công! Các size 35-45 đã được tạo với số lượng 0.');
     }
 
     /**

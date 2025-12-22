@@ -5,7 +5,7 @@
 
 @section('content')
 <!-- Stats Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
     <!-- Total Users -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center justify-between">
@@ -45,17 +45,43 @@
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Total Revenue -->
+<!-- Profit Margin & Stats -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
     <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 text-sm font-medium">Tổng doanh thu</p>
-                <p class="text-3xl font-bold text-gray-800 mt-2">{{ number_format($stats['total_revenue'], 0, ',', '.') }}đ</p>
-                <p class="text-sm text-green-600 mt-1">Tháng này: {{ number_format($stats['monthly_revenue'], 0, ',', '.') }}đ</p>
+                <p class="text-gray-500 text-sm font-medium">Doanh thu</p>
+                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($stats['total_revenue'], 0, ',', '.') }}đ</p>
+                <p class="text-sm text-green-600 mt-1">Tháng: {{ number_format($stats['monthly_revenue'], 0, ',', '.') }}đ</p>
             </div>
             <div class="bg-purple-100 rounded-full p-4">
                 <i class="fas fa-dollar-sign text-3xl text-purple-600"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Tổng nhập hàng</p>
+                <p class="text-2xl font-bold text-gray-800 mt-2">{{ number_format($stats['total_imported'], 0, ',', '.') }}đ</p>
+                <p class="text-sm text-green-600 mt-1">Tháng: {{ number_format($stats['monthly_imported'], 0, ',', '.') }}đ</p>
+            </div>
+            <div class="bg-blue-100 rounded-full p-4">
+                <i class="fas fa-warehouse text-3xl"></i>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-gray-500 text-sm font-medium">Lãi</p>
+                <p class="text-2xl font-bold text-green-600 mt-2">{{ number_format($stats['total_profit'], 0, ',', '.') }}đ</p>
+                <p class="text-sm text-gray-600 mt-1">Tháng: {{ number_format($stats['monthly_profit'], 0, ',', '.') }}đ</p>
+            </div>
+            <div class="bg-green-100 rounded-full p-4">
+                <i class="fas fa-chart-line text-3xl text-green-600"></i>
             </div>
         </div>
     </div>
@@ -86,10 +112,15 @@
     <!-- Quick Actions -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h3 class="text-lg font-bold text-gray-800 mb-4">Thao tác nhanh</h3>
-        <div class="flex justify-center">
-            <a href="{{ route('admin.products.create') }}" class="flex flex-col items-center justify-center p-8 bg-blue-50 hover:bg-blue-100 rounded-lg transition w-full max-w-xs">
-                <i class="fas fa-plus-circle text-5xl text-blue-600 mb-3"></i>
-                <span class="text-lg font-medium text-gray-700">Thêm sản phẩm mới</span>
+        <div class="grid grid-cols-2 gap-4">
+            <a href="{{ route('admin.products.create') }}" class="flex flex-col items-center justify-center p-6 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                <i class="fas fa-plus-circle text-4xl text-blue-600 mb-3"></i>
+                <span class="text-base font-medium text-gray-700">Thêm sản phẩm mới</span>
+            </a>
+            
+            <a href="{{ route('admin.inventory.imports.create') }}" class="flex flex-col items-center justify-center p-6 bg-green-50 hover:bg-green-100 rounded-lg transition">
+                <i class="fas fa-warehouse text-4xl text-green-600 mb-3"></i>
+                <span class="text-base font-medium text-gray-700">Nhập hàng mới</span>
             </a>
         </div>
     </div>

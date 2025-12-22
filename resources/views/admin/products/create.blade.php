@@ -60,10 +60,10 @@
                     @enderror
                 </div>
 
-                <!-- Giá gốc -->
+                <!-- Giá bán -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Giá gốc (VNĐ) <span class="text-red-500">*</span>
+                        Giá bán (VNĐ) <span class="text-red-500">*</span>
                     </label>
                     <input type="number" name="price" value="{{ old('price') }}" required min="0" step="1000"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('price') border-red-500 @enderror">
@@ -73,38 +73,24 @@
                 </div>
             </div>
 
-            <!-- Kích thước và Số lượng -->
-            <div class="md:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                    Kích thước và Số lượng <span class="text-red-500">*</span>
-                </label>
-                
-                <div id="sizes-container" class="space-y-3">
-                    <div class="size-row flex gap-3">
-                        <div class="flex-1">
-                            <input type="text" name="sizes[0][size]" placeholder="Kích thước (VD: 38, 39, 40)" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                        </div>
-                        <div class="flex-1">
-                            <input type="number" name="sizes[0][quantity]" placeholder="Số lượng" 
-                                   min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                        </div>
-                        <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition opacity-50 cursor-not-allowed" disabled>
-                            <i class="fas fa-trash"></i>
-                        </button>
+            <!-- Thông báo về nhập hàng -->
+            <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div class="flex items-start">
+                    <i class="fas fa-info-circle text-blue-600 text-xl mr-3 mt-0.5"></i>
+                    <div>
+                        <p class="text-sm font-medium text-blue-800">Lưu ý về tồn kho</p>
+                        <p class="text-sm text-blue-700 mt-1">
+                            Sản phẩm mới sẽ được tạo với tồn kho = 0. Vui lòng sử dụng chức năng 
+                            <a href="{{ route('admin.inventory.imports.create') }}" class="font-semibold underline hover:text-blue-900">Nhập hàng</a> 
+                            để thêm size và số lượng cho sản phẩm.
+                        </p>
                     </div>
                 </div>
-                
-                <button type="button" id="add-size" class="mt-3 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
-                    <i class="fas fa-plus mr-2"></i>Thêm kích thước
-                </button>
-                @error('sizes')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
             </div>
 
-            <div class="md:col-span-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <!-- Trạng thái -->
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Trạng thái
                     </label>
@@ -115,8 +101,19 @@
                     </select>
                 </div>
 
-                <!-- Upload hình ảnh -->
-                <div class="md:col-span-2">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Sản phẩm mới
+                    </label>
+                    <select name="is_new"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="0" {{ old('is_new', 0) == 0 ? 'selected' : '' }}>Không</option>
+                        <option value="1" {{ old('is_new') == 1 ? 'selected' : '' }}>Có</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Hình ảnh sản phẩm <span class="text-red-500">*</span>
                     </label>
@@ -157,57 +154,4 @@
         </form>
     </div>
 </div>
-
-<script>
-let sizeIndex = 1;
-
-// Add new size row
-document.getElementById('add-size').addEventListener('click', function() {
-    const container = document.getElementById('sizes-container');
-    const newRow = document.createElement('div');
-    newRow.className = 'size-row flex gap-3';
-    newRow.innerHTML = `
-        <div class="flex-1">
-            <input type="text" name="sizes[${sizeIndex}][size]" placeholder="Kích thước (VD: 38, 39, 40)" 
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-        </div>
-        <div class="flex-1">
-            <input type="number" name="sizes[${sizeIndex}][quantity]" placeholder="Số lượng" 
-                   min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
-        </div>
-        <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-            <i class="fas fa-trash"></i>
-        </button>
-    `;
-    container.appendChild(newRow);
-    sizeIndex++;
-    updateRemoveButtons();
-});
-
-// Remove size row
-document.addEventListener('click', function(e) {
-    if (e.target.closest('.remove-size')) {
-        const row = e.target.closest('.size-row');
-        if (document.querySelectorAll('.size-row').length > 1) {
-            row.remove();
-            updateRemoveButtons();
-        }
-    }
-});
-
-// Update remove buttons state
-function updateRemoveButtons() {
-    const rows = document.querySelectorAll('.size-row');
-    rows.forEach((row, index) => {
-        const btn = row.querySelector('.remove-size');
-        if (rows.length === 1) {
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-        } else {
-            btn.disabled = false;
-            btn.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
-    });
-}
-</script>
 @endsection

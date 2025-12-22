@@ -6,7 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductSize extends Model
 {
-    protected $fillable = ['product_id', 'size', 'quantity'];
+    protected $fillable = [
+        'product_id', 
+        'size', 
+        'quantity',
+        'total_imported',
+        'total_sold',
+        'average_cost_per_size'
+    ];
+
+    protected $casts = [
+        'quantity' => 'integer',
+        'total_imported' => 'integer',
+        'total_sold' => 'integer',
+        'average_cost_per_size' => 'decimal:2'
+    ];
 
     /**
      * Relationship: ProductSize belongs to Product

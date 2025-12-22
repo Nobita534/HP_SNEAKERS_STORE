@@ -41,6 +41,11 @@
                         <span>Sản phẩm</span>
                     </a>
                     
+                    <a href="{{ route('admin.inventory.imports.index') }}" class="px-4 py-2 rounded-lg hover:bg-blue-700 transition {{ request()->routeIs('admin.inventory.*') ? 'bg-blue-700' : '' }}">
+                        <i class="fas fa-warehouse mr-2"></i>
+                        <span>Nhập hàng</span>
+                    </a>
+                    
                     <a href="{{ route('admin.orders.index') }}" class="px-4 py-2 rounded-lg hover:bg-blue-700 transition {{ request()->routeIs('admin.orders.*') ? 'bg-blue-700' : '' }}">
                         <i class="fas fa-shopping-cart mr-2"></i>
                         <span>Đơn hàng</span>

@@ -13,6 +13,8 @@ class Product extends Model
         'description',
         'price',
         'sale_price',
+        'average_cost',
+        'profit_margin',
         'brand',
         'image',
         'images',
@@ -27,6 +29,8 @@ class Product extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
+        'average_cost' => 'decimal:2',
+        'profit_margin' => 'decimal:2',
         'rating' => 'decimal:2',
         'images' => 'array',
         'is_featured' => 'boolean',

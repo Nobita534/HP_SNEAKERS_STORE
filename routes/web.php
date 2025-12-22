@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\InventoryImportController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -85,6 +86,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     // Order Management
     Route::resource('orders', AdminOrderController::class);
     Route::put('/orders/{id}/update-status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
+    
+    // Inventory Import Management
+    Route::prefix('inventory')->name('inventory.')->group(function () {
+        Route::resource('imports', InventoryImportController::class)->only(['index', 'create', 'store', 'show']);
+    });
 });
 
 // VNPay Payment Routes
