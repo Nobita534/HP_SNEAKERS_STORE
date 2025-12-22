@@ -154,9 +154,18 @@
                                 @elseif($order->status === 'confirmed') bg-blue-100 text-blue-800
                                 @elseif($order->status === 'shipping') bg-purple-100 text-purple-800
                                 @elseif($order->status === 'delivered') bg-green-100 text-green-800
-                                @else bg-red-100 text-red-800
+                                @elseif($order->status === 'completed') bg-green-100 text-green-800
+                                @elseif($order->status === 'cancelled') bg-red-100 text-red-800
+                                @else bg-gray-100 text-gray-800
                                 @endif">
-                                {{ ucfirst($order->status) }}
+                                @if($order->status === 'pending') Chờ xử lý
+                                @elseif($order->status === 'confirmed') Đã xác nhận
+                                @elseif($order->status === 'shipping') Đang giao hàng
+                                @elseif($order->status === 'delivered') Đã giao hàng
+                                @elseif($order->status === 'completed') Hoàn thành
+                                @elseif($order->status === 'cancelled') Đã hủy
+                                @else {{ ucfirst($order->status) }}
+                                @endif
                             </span>
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">{{ $order->created_at->format('d/m/Y H:i') }}</td>
