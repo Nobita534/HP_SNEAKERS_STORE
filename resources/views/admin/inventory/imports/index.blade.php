@@ -1,11 +1,14 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Danh sách phiếu nhập hàng')
+@section('title', 'Nhập hàng - Admin')
+@section('page-title', 'Nhập hàng')
 
 @section('content')
 <div class="mb-6">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">Danh sách phiếu nhập hàng</h1>
+        <div>
+            <h3 class="text-lg font-semibold text-gray-700">Danh sách phiếu nhập hàng</h3>
+        </div>
         <a href="{{ route('admin.inventory.imports.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition inline-flex items-center">
             <i class="fas fa-plus mr-2"></i> Nhập hàng mới
         </a>

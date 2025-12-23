@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 
-@section('title', 'Chi tiết phiếu nhập hàng')
+@section('title', 'Nhập hàng - Admin')
+@section('page-title', 'Nhập hàng')
 
 @section('content')
 <div class="mb-6">
@@ -69,7 +70,6 @@
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Số lượng</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Giá nhập</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thành tiền</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">WAC hiện tại</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -104,16 +104,6 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right font-semibold text-green-600">
                             {{ number_format($transaction->total_cost, 0, ',', '.') }}đ
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-gray-600">
-                            @php
-                                $productSize = $transaction->product->productSizes->where('size', $transaction->size)->first();
-                            @endphp
-                            @if($productSize)
-                                {{ number_format($productSize->average_cost_per_size, 0, ',', '.') }}đ
-                            @else
-                                -
-                            @endif
                         </td>
                     </tr>
                     @endforeach

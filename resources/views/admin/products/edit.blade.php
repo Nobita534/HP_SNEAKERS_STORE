@@ -93,7 +93,9 @@
                             <input type="number" name="sizes[{{ $index }}][quantity]" 
                                    value="{{ $productSize->quantity }}"
                                    placeholder="Số lượng" 
-                                   min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                                   min="0" 
+                                   readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed focus:ring-2 focus:ring-blue-500" required>
                         </div>
                         <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
                             <i class="fas fa-trash"></i>
@@ -106,8 +108,12 @@
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
                         </div>
                         <div class="flex-1">
-                            <input type="number" name="sizes[0][quantity]" placeholder="Số lượng" 
-                                   min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            <input type="number" name="sizes[0][quantity]" 
+                                   value="0"
+                                   placeholder="Số lượng" 
+                                   min="0" 
+                                   readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed focus:ring-2 focus:ring-blue-500" required>
                         </div>
                         <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition opacity-50 cursor-not-allowed" disabled>
                             <i class="fas fa-trash"></i>
@@ -201,8 +207,12 @@ document.getElementById('add-size').addEventListener('click', function() {
                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
         </div>
         <div class="flex-1">
-            <input type="number" name="sizes[${sizeIndex}][quantity]" placeholder="Số lượng" 
-                   min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" required>
+            <input type="number" name="sizes[${sizeIndex}][quantity]" 
+                   value="0"
+                   placeholder="Số lượng" 
+                   min="0" 
+                   readonly
+                   class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed focus:ring-2 focus:ring-blue-500" required>
         </div>
         <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
             <i class="fas fa-trash"></i>
