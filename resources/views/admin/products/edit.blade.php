@@ -73,7 +73,7 @@
                     @enderror
                 </div>
             </div>
-
+            <br>
             <!-- Kích thước và Số lượng -->
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-3">
@@ -95,9 +95,10 @@
                                    placeholder="Số lượng" 
                                    min="0" 
                                    readonly
+                                   data-quantity="{{ $productSize->quantity }}"
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed focus:ring-2 focus:ring-blue-500" required>
                         </div>
-                        <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+                        <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition {{ $productSize->quantity > 0 ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $productSize->quantity > 0 ? 'disabled' : '' }}>
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -212,6 +213,7 @@ document.getElementById('add-size').addEventListener('click', function() {
                    placeholder="Số lượng" 
                    min="0" 
                    readonly
+                   data-quantity="0"
                    class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed focus:ring-2 focus:ring-blue-500" required>
         </div>
         <button type="button" class="remove-size px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
@@ -226,8 +228,15 @@ document.getElementById('add-size').addEventListener('click', function() {
 // Remove size row
 document.addEventListener('click', function(e) {
     if (e.target.closest('.remove-size')) {
+        const btn = e.target.closest('.remove-size');
+        if (btn.disabled) return; // Don't remove if button is disabled
+        
         const row = e.target.closest('.size-row');
-        if (document.querySelectorAll('.size-row').length > 1) {
+        const quantityInput = row.querySelector('input[name*="[quantity]"]');
+        const quantity = parseInt(quantityInput.value) || 0;
+        
+        // Only allow deletion if quantity is 0
+        if (quantity === 0 && document.querySelectorAll('.size-row').length > 1) {
             row.remove();
             updateRemoveButtons();
         }
@@ -239,12 +248,18 @@ function updateRemoveButtons() {
     const rows = document.querySelectorAll('.size-row');
     rows.forEach((row, index) => {
         const btn = row.querySelector('.remove-size');
-        if (rows.length === 1) {
+        const quantityInput = row.querySelector('input[name*="[quantity]"]');
+        const quantity = parseInt(quantityInput.value) || 0;
+        
+        // Disable if only 1 row OR if quantity > 0
+        if (rows.length === 1 || quantity > 0) {
             btn.disabled = true;
             btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.classList.remove('hover:bg-red-600');
         } else {
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.classList.add('hover:bg-red-600');
         }
     });
 }
