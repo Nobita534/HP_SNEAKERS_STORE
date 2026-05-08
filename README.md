@@ -53,7 +53,3 @@ php artisan serve
 - **Database:** MySQL 8
 - **Build Tool:** Vite
 
-
-### 🎉 Happy Coding!
-
-Nếu gặp vấn đề, hãy kiểm tra file log: `storage/logs/laravel.log`
