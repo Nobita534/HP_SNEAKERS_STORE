@@ -30,9 +30,22 @@ HP Sneakers Store là hệ thống thương mại điện tử được phát tr
 
 ## Backend
 
-- ASP.NET MVC
-- Entity Framework
-- SQL Server
+- Laravel
+- PHP
+- Eloquent ORM
+
+Database
+- MySQL
+
+Frontend
+- Blade
+- HTML
+- CSS
+- JavaScript
+- Bootstrap
+
+Payment
+- VNPay
 
 ## Frontend
 
@@ -52,9 +65,8 @@ HP Sneakers Store là hệ thống thương mại điện tử được phát tr
 ```text
 docs/
 └── business_analyst/
-    ├── 01_System_Overview.md
-    ├── 02_Functional_Requirements.md
-    ├── 03_System_Rules.md
+    ├── system_overview.md
+    ├── functional_requirements.md
     ├── diagrams/
     │   ├── use_case/
     │   ├── activity/
