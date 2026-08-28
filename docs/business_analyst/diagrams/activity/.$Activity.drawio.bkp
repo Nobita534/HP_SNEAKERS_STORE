@@ -1,0 +1,87 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.8 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.8" pages="3">
+  <diagram name="Login" id="ghFJWI32cAIa7SuG52x2">
+    <mxGraphModel dx="1235" dy="731" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2339" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="3VAI8sTIZ4R0KSfUX17J-4" value="Pool" style="swimlane;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=20;html=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="790" width="730" height="720" as="geometry" />
+        </mxCell>
+        <mxCell id="3VAI8sTIZ4R0KSfUX17J-5" value="Khách" style="swimlane;startSize=20;html=1;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-4">
+          <mxGeometry y="20" width="250" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="3VAI8sTIZ4R0KSfUX17J-5" source="WFOP4gangOUtgu3riuN6-1" target="WFOP4gangOUtgu3riuN6-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-1" value="" style="ellipse;fillColor=strokeColor;html=1;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-5">
+          <mxGeometry x="105" y="40" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-2" value="Người dùng truy cập trang Login" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-5">
+          <mxGeometry x="50" y="120" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="3VAI8sTIZ4R0KSfUX17J-5" source="WFOP4gangOUtgu3riuN6-4" target="WFOP4gangOUtgu3riuN6-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-4" value="Người dùng nhập Email và Password" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-5">
+          <mxGeometry x="50" y="220" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-6" value="Người dùng nhấn Login" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-5">
+          <mxGeometry x="50" y="340" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="3VAI8sTIZ4R0KSfUX17J-6" value="Hệ thống" style="swimlane;startSize=20;html=1;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-4">
+          <mxGeometry x="250" y="20" width="220" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-8" value="Người dùng truy cập trang Login" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-6">
+          <mxGeometry x="40" y="120" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-12" value="Kiểm tra dữ liệu đầu vào" style="html=1;align=center;verticalAlign=top;rounded=1;absoluteArcSize=1;arcSize=10;dashed=0;whiteSpace=wrap;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-6">
+          <mxGeometry x="45" y="340" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="3VAI8sTIZ4R0KSfUX17J-7" value="Database" style="swimlane;startSize=20;html=1;" vertex="1" parent="3VAI8sTIZ4R0KSfUX17J-4">
+          <mxGeometry x="470" y="20" width="260" height="700" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="3VAI8sTIZ4R0KSfUX17J-4" source="WFOP4gangOUtgu3riuN6-2" target="WFOP4gangOUtgu3riuN6-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="3VAI8sTIZ4R0KSfUX17J-4" source="WFOP4gangOUtgu3riuN6-8" target="WFOP4gangOUtgu3riuN6-4">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="360" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WFOP4gangOUtgu3riuN6-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="3VAI8sTIZ4R0KSfUX17J-4" source="WFOP4gangOUtgu3riuN6-6" target="WFOP4gangOUtgu3riuN6-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="xoFjoNUqKFvYVY4OAg30" name="Register">
+    <mxGraphModel dx="1050" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2339" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="tnVqXho-0aWldGLfUPXw" name="Logout">
+    <mxGraphModel dx="1050" dy="621" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2339" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="SoaX4vzQhoTo8vsgjjQ_-1" value="Pool" style="swimlane;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;startSize=20;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="80" width="360" height="800" as="geometry" />
+        </mxCell>
+        <mxCell id="SoaX4vzQhoTo8vsgjjQ_-2" value="Lane 1" style="swimlane;startSize=20;html=1;" vertex="1" parent="SoaX4vzQhoTo8vsgjjQ_-1">
+          <mxGeometry y="20" width="120" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="SoaX4vzQhoTo8vsgjjQ_-3" value="Lane 2" style="swimlane;startSize=20;html=1;" vertex="1" parent="SoaX4vzQhoTo8vsgjjQ_-1">
+          <mxGeometry x="120" y="20" width="120" height="780" as="geometry" />
+        </mxCell>
+        <mxCell id="SoaX4vzQhoTo8vsgjjQ_-4" value="Lane 3" style="swimlane;startSize=20;html=1;" vertex="1" parent="SoaX4vzQhoTo8vsgjjQ_-1">
+          <mxGeometry x="240" y="20" width="120" height="780" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
