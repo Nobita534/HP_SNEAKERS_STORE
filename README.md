@@ -183,7 +183,7 @@ requirements. The documentation includes:
 - BPMN
 - System analysis
 
-See the [Business Analyst documentation](docs/business_analyst/README.md) for
+See the [HP_SNEAKER_Business_Analyst_Documentations](https://github.com/Nobita534/HP_SNEAKER_Business_Analyst_Documentations). for
 more information.
 
 ## Project Improvement Direction
