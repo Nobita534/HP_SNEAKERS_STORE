@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+/data_pipeline/data/raw/*
+/data_pipeline/data/processed/*
+/data_pipeline/data/synthetic/*
