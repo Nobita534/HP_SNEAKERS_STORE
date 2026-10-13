@@ -349,16 +349,38 @@
             data.cart_items.forEach(item => {
                 html += `
                     <div class="flex gap-3 items-start hover:bg-gray-50 p-2 rounded-lg transition">
-                        <img src="${item.product_image}" 
-                             alt="${item.product_name}" 
-                             class="w-16 h-16 object-cover rounded-lg">
-                        <div class="flex-1 min-w-0">
-                            <h4 class="text-sm font-medium text-gray-800 truncate">${item.product_name}</h4>
-                            <p class="text-xs text-gray-500">Size: ${item.size}</p>
-                            <div class="flex items-center justify-between mt-1">
-                                <span class="text-xs text-gray-600">SL: ${item.quantity}</span>
-                                <span class="text-sm font-semibold text-blue-600">${formatPrice(item.subtotal)}đ</span>
+
+                        <img src="${item.product_image}"
+                            alt="${item.product_name}"
+                            class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+
+                        <div class="flex-1 min-w-0 flex justify-between gap-4">
+
+                            <div class="min-w-0 flex-1">
+                                <h4 class="text-sm font-medium text-gray-800 truncate">
+                                    ${item.product_name}
+                                </h4>
+
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Size: ${item.size}
+                                </p>
+
+                                <span class="text-xs text-gray-600">
+                                    SL: ${item.quantity}
+                                </span>
                             </div>
+
+                            <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                                <span class="text-sm font-semibold text-blue-600">
+                                    ${formatPrice(item.subtotal)}đ
+                                </span>
+
+                                <button type="button"
+                                        class="px-3 py-1.5 text-xs font-medium bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                                    Thanh toán
+                                </button>
+                            </div>
+
                         </div>
                     </div>
                 `;
@@ -417,8 +439,53 @@
             }
         }
     };
+    window.updateDropdownQuantity = function(input) {
+        const itemId = input.dataset.itemId;
+        const quantity = input.value;
+
+        fetch(`/gio-hang/${itemId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content')
+            },
+            body: JSON.stringify({
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                showToast(data.message, 'error');
+                return;
+            }
+
+            // Giá của item
+            const subtotal = document.getElementById(
+                `cart-item-subtotal-${itemId}`
+            );
+
+            if (subtotal) {
+                subtotal.textContent =
+                    formatPrice(data.subtotal) + 'đ';
+            }
+
+            // Tổng giỏ hàng
+            document.querySelectorAll('.cart-total')
+                .forEach(element => {
+                    element.textContent =
+                        formatPrice(data.total) + 'đ';
+                });
+
+        })
+        .catch(() => {
+            showToast('Không thể cập nhật số lượng', 'error');
+        });
+    };
     </script>
-    
+
     @stack('scripts')
 </body>
 </html>

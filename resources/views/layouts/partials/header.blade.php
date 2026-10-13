@@ -91,7 +91,7 @@
                     <div class="absolute left-0 right-0 top-full h-2 opacity-0 group-hover:opacity-0"></div>
 
                     <!-- Cart dropdown -->
-                    <div class="absolute right-0 top-full pt-2 w-80 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none group-hover:pointer-events-auto">
+                    <div class="absolute right-0 top-full pt-2 w-120 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 pointer-events-none group-hover:pointer-events-auto">
                         <div id="cart-dropdown-content" class="bg-white rounded-lg shadow-xl border border-gray-200">
                         @if($cartCount > 0)
                             <!-- Cart Items -->
@@ -100,16 +100,51 @@
                                 <div class="cart-items-container space-y-3 max-h-64 overflow-y-auto">
                                     @foreach($cartItems as $item)
                                     <div class="flex gap-3 items-start hover:bg-gray-50 p-2 rounded-lg transition">
-                                        <img src="{{ asset($item->product->image) }}" 
-                                             alt="{{ $item->product->name }}" 
-                                             class="w-16 h-16 object-cover rounded-lg">
-                                        <div class="flex-1 min-w-0">
-                                            <h4 class="text-sm font-medium text-gray-800 truncate">{{ $item->product->name }}</h4>
-                                            <p class="text-xs text-gray-500">Size: {{ $item->size }}</p>
-                                            <div class="flex items-center justify-between mt-1">
-                                                <span class="text-xs text-gray-600">SL: {{ $item->quantity }}</span>
-                                                <span class="text-sm font-semibold text-blue-600">{{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}đ</span>
+                                        <img src="{{ asset($item->product->image) }}"
+                                            alt="{{ $item->product->name }}"
+                                            class="w-16 h-16 object-cover rounded-lg flex-shrink-0">
+
+                                        <div class="flex-1 min-w-0 flex justify-between gap-4">
+
+                                            <!-- Product info -->
+                                            <div class="min-w-0 flex-1">
+                                                <h4 class="text-sm font-medium text-gray-800 truncate">
+                                                    {{ $item->product->name }}
+                                                </h4>
+
+                                                <p class="text-sm text-gray-500 mt-1">
+                                                    Size: {{ $item->size }}
+                                                </p>
+
+                                                <div class="flex items-center gap-2 mt-1">
+                                                    <span class="text-sm text-gray-600">SL:</span>
+
+                                                    <input type="number"
+                                                        value="{{ $item->quantity }}"
+                                                        min="1"
+                                                        class="quantity-input w-16 px-2 py-1 border rounded text-sm"
+                                                        data-item-id="{{ $item->id }}"
+                                                        onchange="updateDropdownQuantity(this)">
+                                                </div>
                                             </div>
+
+                                            <!-- Price + action -->
+                                            <div class="flex flex-col items-end gap-2 flex-shrink-0">
+                                                <span id="cart-item-subtotal-{{ $item->id }}"
+                                                        class="text-sm font-semibold text-blue-600">
+                                                        {{ number_format($item->getSubtotal(), 0, ',', '.') }}đ
+                                                </span>
+
+                                                <form action="{{ route('vnpayment.item', $item->id) }}" method="POST">
+                                                    @csrf
+
+                                                    <button type="submit"
+                                                            class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                                        Thanh toán
+                                                    </button>
+                                                </form>
+                                            </div>
+
                                         </div>
                                     </div>
                                     @endforeach

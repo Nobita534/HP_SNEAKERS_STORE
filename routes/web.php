@@ -97,6 +97,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
 Route::middleware(['auth'])->group(function () {
     Route::post('/vnpay/payment', [PaymentController::class, 'vnpay_payment'])
         ->name('vnpayment');
+
+    Route::post('/vnpay/payment/item/{cartItem}', [PaymentController::class, 'vnpayPaymentItem'])
+        ->name('vnpayment.item');
 });
 
 // Return URL không cần auth vì VNPay gọi callback
