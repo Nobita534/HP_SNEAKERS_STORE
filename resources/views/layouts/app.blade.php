@@ -153,27 +153,35 @@
         const mobileSearchInput = document.getElementById('mobile-search-input');
         const mobileSearchSuggestions = document.getElementById('mobile-search-suggestions');
         
-        let searchTimeout;
-
         function setupSearchAutocomplete(inputElement, suggestionsElement) {
             if (!inputElement) return;
+            let searchTimeout;
+            let requestNumber = 0;
 
             inputElement.addEventListener('input', function() {
                 clearTimeout(searchTimeout);
+                const currentRequest = ++requestNumber;
                 const keyword = this.value.trim();
 
-                if (keyword.length < 2) {
+                if ([...keyword].length < 2 || [...keyword].length > 100) {
                     suggestionsElement.classList.add('hidden');
                     return;
                 }
 
                 searchTimeout = setTimeout(() => {
                     fetch(`/api/search-suggestions?q=${encodeURIComponent(keyword)}`)
-                        .then(response => response.json())
+                        .then(response => {
+                            if (!response.ok) throw new Error('Không thể tải gợi ý tìm kiếm');
+                            return response.json();
+                        })
                         .then(data => {
+                            // Bỏ phản hồi cũ nếu người dùng đã đổi từ khóa.
+                            if (currentRequest !== requestNumber) return;
                             displaySuggestions(data, suggestionsElement);
                         })
-                        .catch(error => console.error('Search error:', error));
+                        .catch(() => {
+                            if (currentRequest === requestNumber) suggestionsElement.classList.add('hidden');
+                        });
                 }, 300);
             });
 
@@ -183,6 +191,12 @@
                     suggestionsElement.classList.add('hidden');
                 }
             });
+        }
+
+        function escapeSearchHtml(value) {
+            const element = document.createElement('span');
+            element.textContent = String(value ?? '');
+            return element.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
         function displaySuggestions(data, suggestionsElement) {
@@ -199,10 +213,10 @@
                 html += '<div class="text-xs font-semibold text-gray-500 mb-2">THƯƠNG HIỆU</div>';
                 data.brands.forEach(brand => {
                     html += `
-                        <a href="${brand.url}" class="block px-3 py-2 hover:bg-gray-100 rounded-lg transition">
+                        <a href="${escapeSearchHtml(brand.url)}" class="block px-3 py-2 hover:bg-gray-100 rounded-lg transition">
                             <div class="flex items-center gap-2">
                                 <i class="fas fa-tag text-blue-600"></i>
-                                <span class="font-medium">${brand.name}</span>
+                                <span class="font-medium">${escapeSearchHtml(brand.name)}</span>
                             </div>
                         </a>
                     `;
@@ -215,13 +229,13 @@
             html += '<div class="text-xs font-semibold text-gray-500 mb-2">SẢN PHẨM</div>';
             data.products.forEach(product => {
                 html += `
-                    <a href="${product.url}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg transition">
-                        <img src="${product.image}" alt="${product.name}" class="w-12 h-12 object-cover rounded">
+                    <a href="${escapeSearchHtml(product.url)}" class="flex items-center gap-3 px-3 py-2 hover:bg-gray-100 rounded-lg transition">
+                        <img src="${escapeSearchHtml(product.image)}" alt="${escapeSearchHtml(product.name)}" class="w-12 h-12 object-cover rounded">
                         <div class="flex-1">
-                            <div class="text-sm font-medium text-gray-800 line-clamp-1">${product.name}</div>
-                            <div class="text-xs text-gray-500">${product.brand}</div>
+                            <div class="text-sm font-medium text-gray-800 line-clamp-1">${escapeSearchHtml(product.name)}</div>
+                            <div class="text-xs text-gray-500">${escapeSearchHtml(product.brand)}</div>
                         </div>
-                        <div class="text-sm font-bold text-blue-600">${product.price}đ</div>
+                        <div class="text-sm font-bold text-blue-600">${escapeSearchHtml(product.price)}đ</div>
                     </a>
                 `;
             });

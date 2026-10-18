@@ -14,11 +14,30 @@
     </a>
 </div>
 
+<form action="{{ route('admin.products.index') }}" method="GET" class="mb-6 flex flex-wrap items-end gap-3">
+    <div>
+        <label for="search-by" class="block text-sm font-medium mb-1">Tìm chính xác theo</label>
+        <select id="search-by" name="search_by" class="border rounded-lg px-3 py-2">
+            <option value="sku" @selected($searchBy === 'sku')>SKU</option>
+            <option value="id" @selected($searchBy === 'id')>ID sản phẩm</option>
+        </select>
+    </div>
+    <div class="flex-1">
+        <label for="product-query" class="block text-sm font-medium mb-1">Mã sản phẩm</label>
+        <input id="product-query" name="q" value="{{ $keyword }}" maxlength="100"
+               placeholder="Nhập đầy đủ SKU hoặc ID" class="w-full border rounded-lg px-3 py-2">
+        @error('q') <p class="text-sm text-red-600">{{ $message }}</p> @enderror
+    </div>
+    <button class="bg-blue-600 text-white rounded-lg px-4 py-2" type="submit">Tìm kiếm</button>
+    <a href="{{ route('admin.products.index') }}" class="border rounded-lg px-4 py-2">Xóa bộ lọc</a>
+</form>
+
 <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <table class="w-full">
         <thead class="bg-gray-50">
             <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tên sản phẩm</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Danh mục</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Giá</th>
@@ -30,6 +49,7 @@
             @forelse($products as $product)
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4 text-sm text-gray-800">{{ $product->id }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-800">{{ $product->sku ?? 'Chưa có' }}</td>
                     <td class="px-6 py-4">
                         <span class="text-sm font-medium text-gray-800">{{ $product->name }}</span>
                     </td>
@@ -56,8 +76,8 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="px-6 py-8 text-center text-gray-500">
-                        Chưa có sản phẩm nào
+                    <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                        {{ $keyword !== '' ? 'Không tìm thấy sản phẩm khớp mã đã nhập.' : 'Chưa có sản phẩm nào' }}
                     </td>
                 </tr>
             @endforelse

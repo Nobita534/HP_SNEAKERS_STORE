@@ -12,10 +12,28 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with(['category', 'productSizes'])->orderBy('id', 'asc')->paginate(20);
-        return view('admin.products.index', compact('products'));
+        $validated = $request->validate([
+            'search_by' => ['nullable', 'in:sku,id'],
+            'q' => ['nullable', 'string', 'max:100'],
+        ]);
+        $searchBy = $validated['search_by'] ?? 'sku';
+        $keyword = trim($validated['q'] ?? '');
+        $query = Product::with(['category', 'productSizes']);
+
+        if ($keyword !== '') {
+            if ($searchBy === 'id' && (! ctype_digit($keyword) || strlen($keyword) > 18)) {
+                $query->whereRaw('1 = 0');
+            } else {
+                $query->where($searchBy, '=', $keyword);
+            }
+        }
+
+        $products = $query->orderBy('id')->paginate(20)
+            ->appends(['search_by' => $searchBy, 'q' => $keyword]);
+
+        return view('admin.products.index', compact('products', 'searchBy', 'keyword'));
     }
 
     /**

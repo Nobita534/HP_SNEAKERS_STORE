@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Services\ProductSearch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -231,22 +232,21 @@ class ProductController extends Controller
      * @param Request $request
      * @return \Illuminate\View\View
      */
-    public function search(Request $request)
+    public function search(Request $request, ProductSearch $search)
     {
-        $keyword = $request->get('q', '');
-        $query = Product::where('is_active', true);
-
-        if ($keyword) {
-            $query->where(function ($q) use ($keyword) {
-                $q->where('name', 'LIKE', '%' . $keyword . '%')
-                    ->orWhere('brand', 'LIKE', '%' . $keyword . '%')
-                    ->orWhere('description', 'LIKE', '%' . $keyword . '%');
-            });
-        }
+        $validated = $request->validate([
+            'q' => ['nullable', 'string', 'max:100'],
+            'sort' => ['nullable', 'in:relevance,newest,price_asc,price_desc,name'],
+        ]);
+        $keyword = trim($validated['q'] ?? '');
+        $query = $search->products($keyword);
 
         // Xử lý sắp xếp
-        $sort = $request->get('sort', 'newest');
+        $sort = $validated['sort'] ?? 'relevance';
         switch ($sort) {
+            case 'relevance':
+                $search->rank($query, $keyword);
+                break;
             case 'price_asc':
                 $query->orderBy('price', 'asc');
                 break;
@@ -262,8 +262,8 @@ class ProductController extends Controller
                 break;
         }
 
-        $products = $query->paginate(9)->appends(['q' => $keyword, 'sort' => $sort]);
-        $totalProducts = $query->count();
+        $products = $query->orderBy('id')->paginate(9)->appends(['q' => $keyword, 'sort' => $sort]);
+        $totalProducts = $products->total();
 
         return view('products.search', compact('products', 'keyword', 'totalProducts', 'sort'));
     }
@@ -274,20 +274,18 @@ class ProductController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function searchSuggestions(Request $request)
+    public function searchSuggestions(Request $request, ProductSearch $search)
     {
-        $keyword = $request->get('q', '');
+        $validated = $request->validate(['q' => ['nullable', 'string', 'max:100']]);
+        $keyword = trim($validated['q'] ?? '');
 
-        if (strlen($keyword) < 2) {
-            return response()->json([]);
+        if (mb_strlen($keyword) < 2) {
+            return response()->json(['products' => [], 'brands' => []]);
         }
 
-        // Tìm sản phẩm theo tên hoặc mô tả
-        $products = Product::where('name', 'like', "%{$keyword}%")
-            ->orWhere('brand', 'like', "%{$keyword}%")
-            ->orWhere('description', 'like', "%{$keyword}%")
-            ->with('category')
-            ->orderBy('created_at', 'desc')
+        // Dùng chung điều kiện tìm kiếm và lọc sản phẩm đang bán.
+        $products = $search->rank($search->products($keyword), $keyword)
+            ->orderBy('id')
             ->limit(8)
             ->get()
             ->map(function ($product) {
@@ -302,9 +300,7 @@ class ProductController extends Controller
             });
 
         // Tìm thương hiệu phù hợp
-        $brands = Product::select('brand')
-            ->where('brand', 'like', "%{$keyword}%")
-            ->groupBy('brand')
+        $brands = $search->brands($keyword)
             ->limit(3)
             ->get()
             ->map(function ($item) {

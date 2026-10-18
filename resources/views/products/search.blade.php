@@ -25,6 +25,7 @@
         <div class="flex items-center gap-2">
             <label for="sort" class="text-gray-600 text-sm">Sắp xếp:</label>
             <select id="sort" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="window.location.href='{{ route('products.search') }}?q={{ urlencode($keyword) }}&sort=' + this.value">
+                <option value="relevance" {{ $sort === 'relevance' ? 'selected' : '' }}>Liên quan nhất</option>
                 <option value="newest" {{ $sort === 'newest' ? 'selected' : '' }}>Mới nhất</option>
                 <option value="price_asc" {{ $sort === 'price_asc' ? 'selected' : '' }}>Giá tăng dần</option>
                 <option value="price_desc" {{ $sort === 'price_desc' ? 'selected' : '' }}>Giá giảm dần</option>
